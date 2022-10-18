@@ -20,10 +20,38 @@
 				box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset;
 				padding: 10px;
 				color: #555555;
-				font-size: 1em;
-				line-height: 1.4em;
+				font-size: 1rem;
 				padding: 5px 8px;
 				transition: background-color 0.2s ease 0s;
+				font-family: Arial, Helvetica, sans-serif;
+			}
+
+			input {
+				font-family: Arial, Helvetica, sans-serif;
+			}
+
+			.round-flag-red {
+				width: 1rem;
+				height: 1rem;
+				background-color: red;
+				border-radius: 50%;
+				margin: 0.5rem;
+			}
+
+			.round-flag-orange {
+				width: 1rem;
+				height: 1rem;
+				background-color: orange;
+				border-radius: 50%;
+				margin: 0.5rem;
+			}
+
+			.round-flag-green {
+				width: 1rem;
+				height: 1rem;
+				background-color: green;
+				border-radius: 50%;
+				margin: 0.5rem;
 			}
 
 			textarea.copiable {
@@ -417,8 +445,11 @@
 				<textarea rows="10" cols="100" id="s_to_check_translation" class="s_to_clean" value="" onkeyup="checkString()"></textarea>
 			</div>
 			<div style="flex:1;">
-				<h3 style="margin-left: 5px;">LD Helper Comments</h3>
-				<textarea disabled style="background: white; cursor: auto !important;" rows="10" cols="100" id="s_to_check_comments" class="s_cleaned copiable" value=""></textarea>
+				<div style="display: flex; flex-direction: col; align-items: center;">
+					<h3 style="margin-left: 5px;">LD Helper Comments</h3>
+					<div id="s_to_check_flag"></div>
+				</div>
+				<textarea disabled style="background: white; cursor: auto !important;" rows="10" cols="100" id="s_to_check_comments" value=""></textarea>
 			</div>
 		</div>
 		
@@ -534,6 +565,14 @@
 			const span = document.getElementsByClassName("close")[0];
 			var isCheckMode = false;
 			var codeIntegrityCheckResults = {};
+
+			const comments_not_present_in_trs = "is found in Source Language Text but not present in Translation Text.";
+			const comments_not_present_in_src = "is found in Translation Text but not present in Source Language Text.";
+			const comments_unmatching_code = "Unmatching Code Brackets Detected";
+			const comments_no_issue_found = "No issues found. Please make sure that you have selected corresponding code brackets for this project. Also make sure if the code brackets are in the correct order within the text.";
+			const round_flag_red = "round-flag-red";
+			const round_flag_orange = "round-flag-orange";
+			const round_flag_green = "round-flag-green";
 				
 			const angle_regex = '<.*?>';
 			const square_regex = '\\[\\[.*?\\]\\]|\\[.*?\\]';
@@ -612,6 +651,7 @@
 				text6.value = "";
 				text7.value = "";
 				text8.value = "";
+				setCommentsFlagColor("");
 				
 				document.getElementById("copied_string_id").innerText = "";
 				
@@ -907,7 +947,7 @@
 							
 							// 3-3. PUSH an element to the array of strings(codesplits) with substringed splits for each string
 							
-							// IF the key is not String ID or Translation Texts as we don't want those in codesplits array
+							// IF the key is not String ID or Translation Status as we don't want those in codesplits array
 							if(index > 14) { 
 								codesplits[key] = matches;
 							}
@@ -929,7 +969,7 @@
 									defect_languages.push({
 										language: key,
 										defect: codesplits["Source Language Text"][j],
-										note: "is found in Source Language Text but not present in Translation Text.",
+										note: comments_not_present_in_trs,
 										type: 1
 									});
 								}
@@ -944,7 +984,7 @@
 									defect_languages.push({
 										language: key,
 										defect: codesplits[key][j],
-										note: "is found in Translation Text but not present in Source Language Text.",
+										note: comments_not_present_in_src,
 										type: 2
 									});
 								}
@@ -956,26 +996,13 @@
 							if(test_array[i][key] && defect_languages.length == 0 && JSON.stringify(codesplits["Source Language Text"].sort()) !== JSON.stringify(codesplits[key].sort())) {
 								defect_languages.push({
 										language: key,
-										defect: "Unmatching Code Brackets Detected",
+										defect: comments_unmatching_code,
 										note: "Source Language Text: " + JSON.stringify(codesplits["Source Language Text"].sort()),
 										note2: "Translation Text: " + JSON.stringify(codesplits[key].sort()),
 										type: 3
 									});
 							}
 						}
-						
-						/** Depricated Code
-						// 3-5. IF same defect is found across other languages(more than N other languages to compare with), Remove the defect from defect_languages array
-						let defectCountLimit = 5;
-						
-						for(let i=0; i<defect_languages.length; i++) {
-							for(let j=0; j<defect_languages.length; j++) {
-								if(i !== j && defect_languages[i].defect === defect_languages[j].defect && defect_languages[i].key === defect_languages[j].key && defect_languages[i].langauge !== defect_languages[j].language) {
-									defect_languages[j]["count"] = (defect_languages[j]["count"] || 0) +1;
-								}
-							}
-						}
-						**/
 						
 						// 3-6. IF key "Defect Languages" IS NOT an empty array, PUSH test_array[i] object to result_array
 						if(defect_languages.length > 0) {
@@ -991,6 +1018,24 @@
 				}
 				
 				return {failed_strings: result_array, unidentified_strings: unidentified_array};
+			}
+
+			function setCommentsFlagColor(color) {
+				let flag_element = document.getElementById("s_to_check_flag");
+
+				switch(color) {
+					case round_flag_red:
+						flag_element.className = round_flag_red;
+						break;
+					case round_flag_orange:
+						flag_element.className = round_flag_orange;
+						break;
+					case round_flag_green:
+						flag_element.className = round_flag_green;
+						break;
+					default:
+						flag_element.className = "";
+				}
 			}
 			
 			function checkString(isTouchingSourceText = false) {
@@ -1008,7 +1053,7 @@
 					[`French translationStatus`]: [3]
 				});
 				
-				let text = "No issues found. Please make sure that you have selected corresponding code brackets for this project. Also make sure if the code brackets are in the correct order within the text. (LD helper cannot detect this issue)";
+				let text = comments_no_issue_found;
 				
 				if(result.failed_strings && result.failed_strings[0]) {
 					let errorMessageArray = result.failed_strings[0]["Defect Languages"];
@@ -1021,8 +1066,26 @@
 							let note = errorMessageArray[i].type == 3 ? "\n" + errorMessageArray[i].note + "\n\n" + errorMessageArray[i].note2 : errorMessageArray[i].note;
 							text += `${defect}`
 							text += `\n${note}\n\n`;
+
+							if(errorMessageArray[i].type == 3) {
+								setCommentsFlagColor(round_flag_orange);
+							} else if(errorMessageArray[i].type <= 2) {
+								setCommentsFlagColor(round_flag_red);
+							}
 						}
 					}
+				}
+
+				if(text == comments_no_issue_found) {
+					setCommentsFlagColor(round_flag_green);
+				}
+
+				if(!src) {
+					text = "Source Text is empty."
+					setCommentsFlagColor("");
+				} else if(!trs) {
+					text = "Translation Text is empty."
+					setCommentsFlagColor("");
 				}
 				
 				document.getElementById("s_to_check_comments").value = text;
@@ -1086,7 +1149,7 @@
 				  let cell = worksheet[XLSX.utils.encode_cell({r:0, c:col})];
 				  let value = cell ? cell.v : '';
 				  data[value] = [];
-				  keys.push(cell.v);
+				  keys.push(value);
 				} 
 				 
 				// (B3) READ DATA ROWS
