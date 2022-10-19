@@ -192,8 +192,8 @@
 			
 			function addRow(stringId, sourceLanguageText, translationText, translationStatus, errorMessageArray = []) {
 			    if(translationStatus && translationStatus == "3") {
-				  var table = document.getElementById("result_table");
-				  var row = table.insertRow(2);
+				  var table = document.querySelector("#result_table>tbody");
+				  var row = table.insertRow(0);
 				  var cell1 = row.insertCell(0);
 				  var cell2 = row.insertCell(1);
 				  var cell3 = row.insertCell(2);
@@ -228,10 +228,8 @@
 			}
 
 			function removeAllRows() {
-				var table = document.getElementById("result_table");
-				for(let i = 2; i<table.rows.length;){
-					table.deleteRow(i);
-				}
+				var table = document.querySelector("#result_table>tbody");
+				table.innerHTML = "";
 				rowCount = 0;
 				document.getElementById("row_count").innerText = rowCount == 0 ? '' : rowCount;
 			}

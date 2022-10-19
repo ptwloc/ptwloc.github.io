@@ -99,21 +99,24 @@
 		</div>
 		
 		<table id="result_table">
-			<tr>
-				<th><b>String ID (Copy on click)</b></th>
-				<th><b>Source text</b>&nbsp;&nbsp;<span id="row_count" style="font-size: 1rem; font-weight: normal; color: grey;"></span></th>
-				<th>
-					<select id="language_select" onchange="switchLanguage()">
-						<option value="Select">Please load Excel file</option>
-					</select>
-				</th>
-				<th hidden id="bot_comments"><b>LD Helper Comments</b></th>
-			</tr>
-			<tr id="search_row">
-				<td><input onchange="searchForConsistency()" type="text" id="s_search1" class="searchInput" placeholder="Search" onkeydown="return (event.keyCode!=13);"></td>
-				<td><input onchange="searchForConsistency()" type="text" id="s_search2" class="searchInput" placeholder="Search" onkeydown="return (event.keyCode!=13);"></td>
-				<td><input onchange="searchForConsistency()" type="text" id="s_search3" class="searchInput" placeholder="Search" onkeydown="return (event.keyCode!=13);"></td>
-			</tr>
+			<thead>
+				<tr>
+					<th><b>String ID (Copy on click)</b></th>
+					<th><b>Source text</b>&nbsp;&nbsp;<span id="row_count" style="font-size: 1rem; font-weight: normal; color: grey;"></span></th>
+					<th>
+						<select id="language_select" onchange="switchLanguage()">
+							<option value="Select">Please load Excel file</option>
+						</select>
+					</th>
+					<th hidden id="bot_comments"><b>LD Helper Comments</b></th>
+				</tr>
+				<tr id="search_row">
+					<td><input onchange="searchForConsistency()" type="text" id="s_search1" class="searchInput" placeholder="Search" onkeydown="return (event.keyCode!=13);"></td>
+					<td><input onchange="searchForConsistency()" type="text" id="s_search2" class="searchInput" placeholder="Search" onkeydown="return (event.keyCode!=13);"></td>
+					<td><input onchange="searchForConsistency()" type="text" id="s_search3" class="searchInput" placeholder="Search" onkeydown="return (event.keyCode!=13);"></td>
+				</tr>
+			</thead>
+			<tbody></tbody>
 		</table><br><br><br>
 		
 		<div id="help_modal" class="modal">
