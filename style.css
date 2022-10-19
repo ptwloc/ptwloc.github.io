@@ -256,14 +256,26 @@ input:checked + .slider:before {
   border-radius: 6px 6px 6px 6px;
 }
 
+table thead {
+  position: sticky;
+  top: 0;
+}
+
+table thead {
+  inset-block-start: 0; /* "top" */
+}
+
 #result_table {
   border-collapse: collapse;
   width: 100%;
   border: 1px solid #BCDBEA;
   font-size: 18px;
   table-layout: fixed;
-  overflow: hidden;
   border-radius: 6px;
+  background-color: white;
+}
+
+#search_row {
   background-color: white;
 }
 
@@ -272,16 +284,16 @@ input:checked + .slider:before {
   padding: 12px;
   word-wrap: break-word;
   max-width: 30%;
-  border: 1px solid #BCDBEA;
+  border-bottom: 1px solid #BCDBEA;
 }
 
 #result_table tr {
-  border: 1px solid #BCDBEA;
+  border-bottom: 1px solid #BCDBEA;
 }
 
 #result_table th {
   background-color: #BCDBEA;
-  border: 1px solid #BCDBEA;
+  border-bottom: 1px solid #BCDBEA;
 }
 
 /* 
