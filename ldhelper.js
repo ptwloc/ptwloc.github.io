@@ -2,6 +2,7 @@
 			const searchElement1 = document.querySelector('#s_search1');
 			const searchElement2 = document.querySelector('#s_search2');
 			const searchElement3 = document.querySelector('#s_search3');
+			const language_select = document.querySelector('#language_select'); 
 			var excel_json_data;
 			var selectedLanguage = "Language Not Selected";
 			const modal = document.getElementById("help_modal");
@@ -227,12 +228,12 @@
 			}
 
 			function removeAllRows() {
-			  var table = document.getElementById("result_table");
-			  for(let i = 2; i<table.rows.length;){
-				table.deleteRow(i);
-			  }
-			  rowCount = 0;
-			  document.getElementById("row_count").innerText = rowCount == 0 ? '' : rowCount;
+				var table = document.getElementById("result_table");
+				for(let i = 2; i<table.rows.length;){
+					table.deleteRow(i);
+				}
+				rowCount = 0;
+				document.getElementById("row_count").innerText = rowCount == 0 ? '' : rowCount;
 			}
 			
 			function searchForConsistency() {
@@ -333,38 +334,13 @@
 				for(let i=0; i<source_array["String Identifier"].length; i++) {
 					if(source_array["Source Language Text"][i] && (source_array["Source Language Text"][i].includes("</") || source_array["Source Language Text"][i].includes("/>") || source_array["Source Language Text"][i].includes("{") || source_array["Source Language Text"][i].includes("}")
 					|| source_array["Source Language Text"][i].includes("[") || source_array["Source Language Text"][i].includes("]"))) {
-						test_array.push({
-							["String Identifier"]: source_array["String Identifier"][i],
-							["French translationStatus"]: source_array["French translationStatus"] ? source_array["French translationStatus"][i] : null,
-							["Brazilian Portuguese translationStatus"]: source_array["Brazilian Portuguese translationStatus"] ? source_array["Brazilian Portuguese translationStatus"][i] : null,
-							["Polish translationStatus"]: source_array["Polish translationStatus"] ? source_array["Polish translationStatus"][i] : null,
-							["Mexican Spanish translationStatus"]: source_array["Mexican Spanish translationStatus"] ? source_array["Mexican Spanish translationStatus"][i] : null,
-							["Italian translationStatus"]: source_array["Italian translationStatus"] ? source_array["Italian translationStatus"][i] : null,
-							["Japanese translationStatus"]: source_array["Japanese translationStatus"] ? source_array["Japanese translationStatus"][i] : null,
-							["Arabic translationStatus"]: source_array["Arabic translationStatus"] ? source_array["Arabic translationStatus"][i] : null,
-							["Simplified Chinese translationStatus"]: source_array["Simplified Chinese translationStatus"] ? source_array["Simplified Chinese translationStatus"][i] : null,
-							["Traditional Chinese translationStatus"]: source_array["Traditional Chinese translationStatus"] ? source_array["Traditional Chinese translationStatus"][i] : null,
-							["Korean translationStatus"]: source_array["Korean translationStatus"] ? source_array["Korean translationStatus"][i] : null,
-							["Russian translationStatus"]: source_array["Russian translationStatus"] ? source_array["Russian translationStatus"][i] : null,
-							["German translationStatus"]: source_array["German translationStatus"] ? source_array["German translationStatus"][i] : null,
-							["Spanish translationStatus"]: source_array["Spanish translationStatus"] ? source_array["Spanish translationStatus"][i] : null,
-							["Turkish translationStatus"]: source_array["Turkish translationStatus"] ? source_array["Turkish translationStatus"][i] : null,
-							["Source Language Text"]: source_array["Source Language Text"][i],
-							["French text"]: source_array["French text"] ? source_array["French text"][i] : null,
-							["Turkish text"]: source_array["Turkish text"] ? source_array["Turkish text"][i] : null,
-							["Brazilian Portuguese text"]: source_array["Brazilian Portuguese text"] ? source_array["Brazilian Portuguese text"][i] : null,
-							["Polish text"]: source_array["Polish text"] ? source_array["Polish text"][i] : null,
-							["Mexican Spanish text"]: source_array["Mexican Spanish text"] ? source_array["Mexican Spanish text"][i] : null,
-							["Italian text"]: source_array["Italian text"] ? source_array["Italian text"][i] : null,
-							["Japanese text"]: source_array["Japanese text"] ? source_array["Japanese text"][i] : null,
-							["Arabic text"]: source_array["Arabic text"] ? source_array["Arabic text"][i] : null,
-							["Simplified Chinese text"]: source_array["Simplified Chinese text"] ? source_array["Simplified Chinese text"][i] : null,
-							["Traditional Chinese text"]: source_array["Traditional Chinese text"] ? source_array["Traditional Chinese text"][i] : null,
-							["Korean text"]: source_array["Korean text"] ? source_array["Korean text"][i] : null,
-							["Russian text"]: source_array["Russian text"] ? source_array["Russian text"][i] : null,
-							["German text"]: source_array["German text"] ? source_array["German text"][i] : null,
-							["Spanish text"]: source_array["Spanish text"] ? source_array["Spanish text"][i] : null
-						});
+						let obj = {};
+
+						for(let key in source_array) {
+							obj[key] = source_array[key] ? source_array[key][i] : null;
+						}
+
+						test_array.push(obj);
 					}
 				}
 				
@@ -374,7 +350,6 @@
 					// TRY
 					try {
 						let codesplits = {};
-						let index = 0;
 					
 						for (const key in test_array[i]) {
 						
@@ -390,12 +365,11 @@
 							
 							// 3-3. PUSH an element to the array of strings(codesplits) with substringed splits for each string
 							
+							// MUST EDIT HERE ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! !
 							// IF the key is not String ID or Translation Status as we don't want those in codesplits array
-							if(index > 14) { 
+							if(key.toLowerCase().includes("text")) { 
 								codesplits[key] = matches;
 							}
-							
-							index = index + 1;
 						}
 						
 						// An example of codesplits object: { French Text: [], Korean Text: ['{hello}'], ..., Source Language Text: ['{hello}', '<world>'] } 
@@ -609,6 +583,22 @@
                                 data[value] = [];
                                 keys.push(value);
                             } 
+
+							while (language_select.options.length > 0) {
+								language_select.remove(0);
+							}
+
+							selectedLanguage = "Select Language";
+							let newOption = new Option(selectedLanguage, selectedLanguage);
+							language_select.add(newOption, undefined);
+
+							for(let key of keys) {
+								if(!key.toLowerCase().includes("source") && key.toLowerCase().includes(" text")) {
+									let key_language = key.substr(0, key.toLowerCase().indexOf(" text"));
+									let newOption = new Option(key_language, key_language);
+									language_select.add(newOption, undefined);
+								}
+							}
                             
                             // (B3) READ DATA ROWS
                             for (let row=range.s.r + 1; row<=range.e.r; row++) {
@@ -662,5 +652,5 @@
             }
 			
 			function easterEgg() {
-				alert("\n\nYou found me here! How did I make this website? I was a former intermediate-senior web/mobile application developer who worked on various projects! Send me a DM on Slack/Teams if you have any feedbacks or just want to say hello!\n\n\n- Heechan from LQA Team 4");
+				alert("\n\nYou found me! I was an intermediate/senior web/mobile application developer who worked on various projects! Send me a DM on Slack/Teams if you have any feedbacks or just want to say hello!\n\n\n- Heechan from LQA Team 4");
 			}
