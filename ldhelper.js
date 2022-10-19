@@ -586,19 +586,7 @@
                 isCheckMode = false;
             }
 
-            document.getElementById("file_form").addEventListener("submit", function(evt) {
-                evt.preventDefault(); // stop the submit
-
-                document.getElementById("upload_status").innerHTML = `
-                    <div style="display: flex; flex-direction: col; align-itmes: center;">
-                        <img width="40px" height="40px" src="./loading.gif" style="margin-left: .5rem; margin-right: 1rem;" alt="..."/>
-                        <div style="flex:1; margin: auto;">
-                            LOADING... Please wait. This may take a few seconds. <br>
-                            If your browser asks you if you would like to wait, please click on wait button.
-                        </div>
-                    </div>
-                `;
-
+            function onSubmitFile() {
                 try {
                     // (A) NEW FILE READER
                     var reader = new FileReader();
@@ -651,6 +639,22 @@
                 } catch(e) {
                     handleFileLoadError(e);
                 }
+            }
+
+            document.getElementById("file_form").addEventListener("submit", function(evt) {
+                evt.preventDefault(); // stop the submit
+
+                document.getElementById("upload_status").innerHTML = `
+                    <div style="display: flex; flex-direction: col; align-itmes: center;">
+                        <img width="40px" height="40px" src="./loading.gif" style="margin-left: .5rem; margin-right: 1rem;" alt="..."/>
+                        <div style="flex:1; margin: auto;">
+                            LOADING... Please wait. This may take a few seconds. <br>
+                            If your browser asks you if you would like to wait, please click on wait button.
+                        </div>
+                    </div>
+                `;
+
+                setTimeout(onSubmitFile, 100);
             });
 
             function submitFileForm() {
