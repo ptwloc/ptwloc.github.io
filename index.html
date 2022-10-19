@@ -10,7 +10,7 @@
 		<link rel="stylesheet" href="./style.css">
 	</head>
 	<body style="background: #EAEDF1; padding: 50px; font-family: Arial, Helvetica, sans-serif;">
-		<p style="position: absolute; right: 50px; top: 1rem; font-size: .8rem; cursor: pointer;" onclick="easterEgg()">@LD Helper Alpha 2.3.0 By Heechan</p>
+		<p style="position: absolute; right: 50px; top: 1rem; font-size: .8rem; cursor: pointer;" onclick="easterEgg()">@LD Helper Alpha 2.3.1 By Heechan</p>
 		<div style="display: flex; flex-direction: col; align-items: center;">
 			<img src="./icon.png" alt="LD Helper" width="30px" height="30px" />
 			<h5 style="margin: 5px; color: grey;">Press ESC to clear all inputs / Press Enter to search</h5>
@@ -92,6 +92,11 @@
 				<div></div>
 			</div>
 		</div>
+
+		<div style="display: flex; flex-direction: col; justify-content: flex-end; align-items: center;">
+			<div style="width: 11px; height: 11px; background-color: green; border-radius: 50%;"></div>
+			<p style="margin-left: 0.5rem; font-size: 0.9rem;">LD Helper will only display <span style="color: green; font-weight: bold;">Green</span> translation status strings.</p>
+		</div>
 		
 		<table id="result_table">
 			<tr>
@@ -126,12 +131,6 @@
 			</ol>
 			<br>
 			<br>
-			<h3>Note</h3>
-			<div style="width: 20px; height: 20px; background-color: green; border-radius: 50%; position: absolute;"></div>
-			<p style="margin-left: 2rem;">LD Helper will only display <span style="color: green; font-weight: bold;">Green</span> translation status strings. (Updated from LD Helper Alpha 2.0.0)</p>
-			<img src="./icon.png" alt="LD Helper" width="20" height="20" style="position: absolute;" />
-			<p style="margin-left: 2rem;">Please contact <b style="color: #ffc90d">Heechan</b> from LQA Team 4 by Slack/Teams if you have any questions.</p>
-			<br>
 			<br>
 			<h3>Troubleshooting</h3>
 			<p>If your LD excel file is not working, please make sure that it has the following column names in the first row. (case-sensitive)</p>
@@ -143,6 +142,12 @@
 			    <li style="margin-bottom: 1rem;"><span style="color: grey">Your language</span><b> text</b></li>
 			    <li style="margin-bottom: 1rem;"><span style="color: grey">Your language</span><b> translationStatus</b></li>
 			</ul>
+			<br>
+			<br>
+			<br>
+			<h3>Contact</h3>
+			<img src="./icon.png" alt="LD Helper" width="20" height="20" style="position: absolute;" />
+			<p style="margin-left: 2rem;">Please DM <b style="color: #ffc90d">Heechan</b> from LQA Team 4 by Slack/Teams if you have any questions.</p>
 			<br>
 		  </div>
 		</div>
