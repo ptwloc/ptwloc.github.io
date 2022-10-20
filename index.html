@@ -10,10 +10,10 @@
 		<link rel="stylesheet" href="./style.css">
 	</head>
 	<body style="background: #EAEDF1; padding: 50px; font-family: Arial, Helvetica, sans-serif;">
-		<p style="position: absolute; right: 50px; top: 1rem; font-size: .8rem; cursor: pointer;" onclick="easterEgg()">@LD Helper Alpha 2.4.0 By Heechan</p>
+		<p style="position: absolute; right: 50px; top: 1rem; font-size: .8rem; cursor: pointer;" onclick="easterEgg()">@LD Helper Alpha 2.4.1 By Heechan</p>
 		<div style="display: flex; flex-direction: col; align-items: center;">
 			<img src="./icon.png" alt="LD Helper" width="30px" height="30px" />
-			<h5 style="margin: 5px; color: grey;">Press ESC to clear all inputs / Press Enter to search</h5>
+			<h5 style="margin: 5px; color: grey;">Press ESC to clear all inputs</h5>
 		</div>
 		<div style="display: flex; flex-direction: col; margin-top: 20px; margin-bottom: 40px; width: 100%;">
 			<div style="flex:1;">
@@ -111,9 +111,9 @@
 					<th hidden id="bot_comments"><b>LD Helper Comments</b></th>
 				</tr>
 				<tr id="search_row">
-					<td><input onchange="searchForConsistency()" type="text" id="s_search1" class="searchInput" placeholder="Search" onkeydown="return (event.keyCode!=13);"></td>
-					<td><input onchange="searchForConsistency()" type="text" id="s_search2" class="searchInput" placeholder="Search" onkeydown="return (event.keyCode!=13);"></td>
-					<td><input onchange="searchForConsistency()" type="text" id="s_search3" class="searchInput" placeholder="Search" onkeydown="return (event.keyCode!=13);"></td>
+					<td><input onkeyup="searchForConsistency()" type="text" id="s_search1" class="searchInput" placeholder="Search" onkeydown="return (event.keyCode!=13);"></td>
+					<td><input onkeyup="searchForConsistency()" type="text" id="s_search2" class="searchInput" placeholder="Search" onkeydown="return (event.keyCode!=13);"></td>
+					<td><input onkeyup="searchForConsistency()" type="text" id="s_search3" class="searchInput" placeholder="Search" onkeydown="return (event.keyCode!=13);"></td>
 				</tr>
 			</thead>
 			<tbody></tbody>
