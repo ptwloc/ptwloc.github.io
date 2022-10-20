@@ -296,6 +296,74 @@ table thead {
   border-bottom: 1px solid #BCDBEA;
 }
 
+#pagination {
+  border-radius: 6px;
+  background-color: #BCDBEA;
+  width: 60px;
+  height: 40px;
+  cursor: pointer;
+  position: fixed;
+  right: 180px;
+  bottom: 80px;
+  font-weight: bold;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: inset 0 0 0 0 #54b3d6;
+  transition: color 0.1s ease-in-out, box-shadow .3s ease-in-out;
+}
+
+#pagination:hover {
+  box-shadow: inset 100vw 0 0 0 #54b3d6;;
+}
+
+#prev_page {
+  border-radius: 6px;
+  background-color: #BCDBEA;
+  width: 40px;
+  height: 40px;
+  position: fixed;
+  right: 120px;
+  bottom: 80px; 
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 20px;
+  color: white;
+  box-shadow: inset 0 0 0 0 #54b3d6;
+  transition: color 0.1s ease-in-out, box-shadow .3s ease-in-out;
+}
+
+#prev_page:hover {
+  box-shadow: inset 100vw 0 0 0 #54b3d6;;
+}
+
+#next_page {
+  border-radius: 6px;
+  background-color: #BCDBEA;
+  width: 40px;
+  height: 40px;
+  position: fixed;
+  right: 60px;
+  bottom: 80px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 20px;
+  color: white;
+  box-shadow: inset 0 0 0 0 #54b3d6;
+  transition: color 0.1s ease-in-out, box-shadow .3s ease-in-out;
+}
+
+#next_page:hover {
+  box-shadow: inset 100vw 0 0 0 #54b3d6;;
+}
+
 /* 
 Popup 
 Arrows and dropshadows are applied to .popup. Text align is "centered." You'll probably want to set it to "left."

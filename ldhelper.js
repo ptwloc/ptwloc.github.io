@@ -9,6 +9,11 @@
 			const span = document.getElementsByClassName("close")[0];
 			var isCheckMode = false;
 			var codeIntegrityCheckResults = {};
+			
+			const rowsPerPage = 500;
+			var allRows = [];
+			var pagination = 1;
+			var maxPagination = 1;
 
 			const comments_not_present_in_trs = "is found in Source Language Text but not present in Translation Text.";
 			const comments_not_present_in_src = "is found in Translation Text but not present in Source Language Text.";
@@ -32,7 +37,7 @@
 				document.getElementById("bot_comments").hidden = true;
 				document.getElementById("code_selector").style.display = "none";
 				document.getElementById("s_to_check").style.display = "none";
-				removeAllRows();
+				searchForConsistency();
 			}
 			
 			function onCheckBrackets(element) {
@@ -222,8 +227,6 @@
 					
 					cell4.innerHTML = text;
 				  }
-				  
-				  rowCount = rowCount + 1;
 			    }
 			}
 
@@ -232,6 +235,58 @@
 				table.innerHTML = "";
 				rowCount = 0;
 				document.getElementById("row_count").innerText = rowCount == 0 ? '' : rowCount;
+				allRows = [];
+				pagination = 1;
+				maxPagination = 1;
+			}
+
+			function nextPage() {
+				if(pagination < maxPagination) {
+					var table = document.querySelector("#result_table>tbody");
+					table.innerHTML = "";
+					pagination = pagination + 1;
+					displayRows();
+				}
+			}
+
+			function prevPage() {
+				if(pagination > 1) {
+					var table = document.querySelector("#result_table>tbody");
+					table.innerHTML = "";
+					pagination = pagination - 1;
+					displayRows();
+				}
+			}
+
+			function firstOrLastPage() {
+				if(pagination <= maxPagination/2) {
+					var table = document.querySelector("#result_table>tbody");
+					table.innerHTML = "";
+					pagination = maxPagination;
+					displayRows();
+				} else {
+					var table = document.querySelector("#result_table>tbody");
+					table.innerHTML = "";
+					pagination = 1;
+					displayRows();
+				}
+			}
+
+			function displayRows() {
+				if(allRows[0] && allRows[0].trs_defect) {
+					for(let i=(pagination-1)*rowsPerPage; i<pagination*rowsPerPage && i < allRows.length; i++) {
+						let row = allRows[i];
+						addRow(row.string_id, row.src_text, row.trs_text, row.trs_stat, row.trs_defect);
+					}
+				} else {
+					for(let i=(pagination-1)*rowsPerPage; i<pagination*rowsPerPage && i < allRows.length; i++) {
+						let row = allRows[i];
+						addRow(row.string_id, row.src_text, row.trs_text, row.trs_stat);
+					}
+				}
+
+				rowCount = allRows.length;
+				document.getElementById("pagination").innerHTML = pagination + "/" + maxPagination;
 			}
 			
 			function searchForConsistency() {
@@ -243,23 +298,32 @@
 				  removeAllRows();
 				  var string_ids = excel_json_data["String Identifier"];
 				  
+				  let rows = [];
+
 				  if(string_ids !== null) {
 					for(var i=string_ids.length-1; i>=0; i--) {
-						if( (s1 || s2 || s3) &&
-							(s1 ? excel_json_data["String Identifier"][i].toLowerCase().includes(s1.toLowerCase()) : true) &&
+						if( (s1 ? excel_json_data["String Identifier"][i].toLowerCase().includes(s1.toLowerCase()) : true) &&
 							(s2 ? excel_json_data["Source Language Text"][i].toLowerCase().includes(s2.toLowerCase()) : true) &&
 							(s3 ? excel_json_data[selectedLanguage + " text"][i].toLowerCase().includes(s3.toLowerCase()) : true) ) {
-							addRow(excel_json_data["String Identifier"][i], excel_json_data["Source Language Text"][i], excel_json_data[selectedLanguage + " text"] ? excel_json_data[selectedLanguage + " text"][i] : "", excel_json_data[selectedLanguage + " translationStatus"] ? excel_json_data[selectedLanguage + " translationStatus"][i] : "");
+							
+							rows.push({
+								string_id: excel_json_data["String Identifier"][i],
+								src_text: excel_json_data["Source Language Text"][i],
+								trs_text: excel_json_data[selectedLanguage + " text"] ? excel_json_data[selectedLanguage + " text"][i] : "",
+								trs_stat: excel_json_data[selectedLanguage + " translationStatus"] ? excel_json_data[selectedLanguage + " translationStatus"][i] : ""
+							});
 						}
 					}
-					document.getElementById("row_count").innerText = rowCount == 0 ? '' : rowCount;
 				  }
+
+				  allRows = rows;
+				  pagination = 1;
+				  maxPagination = Math.ceil((allRows.length>0?allRows.length:1)/rowsPerPage);
+
+				  displayRows();
+
+				  document.getElementById("row_count").innerText = rowCount == 0 ? '' : rowCount;
 			  }
-			  
-			  if(!s1 && !s2 && !s3) {
-				removeAllRows();
-			  }
-			  
 			}
 			
 			function switchLanguage() {
@@ -474,6 +538,8 @@
 				document.getElementById("code_selector").style.display = "flex";
 				document.getElementById("s_to_check").style.display = "flex";
 				removeAllRows();
+
+				let rows = [];
 			
 				for(let i=0; i<codeIntegrityCheckResults.failed_strings.length; i++) {
 					let language_is_affected = false;
@@ -485,11 +551,23 @@
 					});
 					
 					if(language_is_affected) {
-						addRow(codeIntegrityCheckResults.failed_strings[i]["String Identifier"], codeIntegrityCheckResults.failed_strings[i]["Source Language Text"],
-						codeIntegrityCheckResults.failed_strings[i][selectedLanguage + " text"], codeIntegrityCheckResults.failed_strings[i][selectedLanguage + " translationStatus"], codeIntegrityCheckResults.failed_strings[i]["Defect Languages"]);
-					    document.getElementById("row_count").innerText = rowCount == 0 ? '' : rowCount;
+						rows.push({
+							string_id: codeIntegrityCheckResults.failed_strings[i]["String Identifier"],
+							src_text: codeIntegrityCheckResults.failed_strings[i]["Source Language Text"],
+							trs_text: codeIntegrityCheckResults.failed_strings[i][selectedLanguage + " text"],
+							trs_stat: codeIntegrityCheckResults.failed_strings[i][selectedLanguage + " translationStatus"],
+							trs_defect: codeIntegrityCheckResults.failed_strings[i]["Defect Languages"]
+						});
 					}
 				}
+
+				allRows = rows;
+				pagination = 1;
+				maxPagination = Math.ceil((allRows.length>0?allRows.length:1)/rowsPerPage);
+
+				displayRows();
+				
+				document.getElementById("row_count").innerText = rowCount == 0 ? '' : rowCount;
 			}
 			
 			function getCodeIntegrityCheckResults() {
@@ -570,6 +648,7 @@
                             // (B4) JSON ENCODE
                             excel_json_data = data;
                             document.getElementById("upload_status").innerHTML = "File Successfully Loaded";
+							document.getElementById("search_button").hidden = true;
                             document.getElementById("check_button").hidden = false;
                             document.getElementById("search_row").hidden = false;
                             document.getElementById("bot_comments").hidden = true;
