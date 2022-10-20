@@ -245,7 +245,8 @@
 				  
 				  if(string_ids !== null) {
 					for(var i=string_ids.length-1; i>=0; i--) {
-						if( (s1 ? excel_json_data["String Identifier"][i].toLowerCase().includes(s1.toLowerCase()) : true) &&
+						if( (s1 || s2 || s3) &&
+							(s1 ? excel_json_data["String Identifier"][i].toLowerCase().includes(s1.toLowerCase()) : true) &&
 							(s2 ? excel_json_data["Source Language Text"][i].toLowerCase().includes(s2.toLowerCase()) : true) &&
 							(s3 ? excel_json_data[selectedLanguage + " text"][i].toLowerCase().includes(s3.toLowerCase()) : true) ) {
 							addRow(excel_json_data["String Identifier"][i], excel_json_data["Source Language Text"][i], excel_json_data[selectedLanguage + " text"] ? excel_json_data[selectedLanguage + " text"][i] : "", excel_json_data[selectedLanguage + " translationStatus"] ? excel_json_data[selectedLanguage + " translationStatus"][i] : "");
