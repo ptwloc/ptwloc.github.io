@@ -244,55 +244,14 @@
 				  var string_ids = excel_json_data["String Identifier"];
 				  
 				  if(string_ids !== null) {
-					  if(s1 && s2 && s3) {
-						for(var i=string_ids.length-1; i>=0; i--) {
-							if( excel_json_data["String Identifier"][i].toLowerCase().includes(s1.toLowerCase()) &&
-								excel_json_data["Source Language Text"][i].toLowerCase().includes(s2.toLowerCase()) &&
-								excel_json_data[selectedLanguage + " text"][i].toLowerCase().includes(s3.toLowerCase()) ) {
-								addRow(excel_json_data["String Identifier"][i], excel_json_data["Source Language Text"][i], excel_json_data[selectedLanguage + " text"] ? excel_json_data[selectedLanguage + " text"][i] : "", excel_json_data[selectedLanguage + " translationStatus"] ? excel_json_data[selectedLanguage + " translationStatus"][i] : "");
-							}
+					for(var i=string_ids.length-1; i>=0; i--) {
+						if( (s1 ? excel_json_data["String Identifier"][i].toLowerCase().includes(s1.toLowerCase()) : true) &&
+							(s2 ? excel_json_data["Source Language Text"][i].toLowerCase().includes(s2.toLowerCase()) : true) &&
+							(s3 ? excel_json_data[selectedLanguage + " text"][i].toLowerCase().includes(s3.toLowerCase()) : true) ) {
+							addRow(excel_json_data["String Identifier"][i], excel_json_data["Source Language Text"][i], excel_json_data[selectedLanguage + " text"] ? excel_json_data[selectedLanguage + " text"][i] : "", excel_json_data[selectedLanguage + " translationStatus"] ? excel_json_data[selectedLanguage + " translationStatus"][i] : "");
 						}
-					  } else if(s1 && s2) {
-						for(var i=string_ids.length-1; i>=0; i--) {
-							if( excel_json_data["String Identifier"][i].toLowerCase().includes(s1.toLowerCase()) &&
-								excel_json_data["Source Language Text"][i].toLowerCase().includes(s2.toLowerCase()) ) {
-								addRow(excel_json_data["String Identifier"][i], excel_json_data["Source Language Text"][i], excel_json_data[selectedLanguage + " text"] ? excel_json_data[selectedLanguage + " text"][i] : "", excel_json_data[selectedLanguage + " translationStatus"] ? excel_json_data[selectedLanguage + " translationStatus"][i] : "");
-							}
-						}
-					  } else if(s1 && s3) {
-						for(var i=string_ids.length-1; i>=0; i--) {
-							if( excel_json_data["String Identifier"][i].toLowerCase().includes(s1.toLowerCase()) &&
-								excel_json_data[selectedLanguage + " text"][i].toLowerCase().includes(s3.toLowerCase()) ) {
-								addRow(excel_json_data["String Identifier"][i], excel_json_data["Source Language Text"][i], excel_json_data[selectedLanguage + " text"] ? excel_json_data[selectedLanguage + " text"][i] : "", excel_json_data[selectedLanguage + " translationStatus"] ? excel_json_data[selectedLanguage + " translationStatus"][i] : "");
-							}
-						}
-					  } else if(s2 && s3) {
-						for(var i=string_ids.length-1; i>=0; i--) {
-							if( excel_json_data["Source Language Text"][i].toLowerCase().includes(s2.toLowerCase()) &&
-								excel_json_data[selectedLanguage + " text"][i].toLowerCase().includes(s3.toLowerCase()) ) {
-								addRow(excel_json_data["String Identifier"][i], excel_json_data["Source Language Text"][i], excel_json_data[selectedLanguage + " text"] ? excel_json_data[selectedLanguage + " text"][i] : "", excel_json_data[selectedLanguage + " translationStatus"] ? excel_json_data[selectedLanguage + " translationStatus"][i] : "");
-							}
-						}
-					  } else if(s1) {
-						for(var i=string_ids.length-1; i>=0; i--) {
-							if( excel_json_data["String Identifier"][i].toLowerCase().includes(s1.toLowerCase()) ) {
-								addRow(excel_json_data["String Identifier"][i], excel_json_data["Source Language Text"][i], excel_json_data[selectedLanguage + " text"] ? excel_json_data[selectedLanguage + " text"][i] : "", excel_json_data[selectedLanguage + " translationStatus"] ? excel_json_data[selectedLanguage + " translationStatus"][i] : "");
-							}
-						}
-					  } else if(s2) {
-						for(var i=string_ids.length-1; i>=0; i--) {
-							if( excel_json_data["Source Language Text"][i].toLowerCase().includes(s2.toLowerCase()) ) {
-								addRow(excel_json_data["String Identifier"][i], excel_json_data["Source Language Text"][i], excel_json_data[selectedLanguage + " text"] ? excel_json_data[selectedLanguage + " text"][i] : "", excel_json_data[selectedLanguage + " translationStatus"] ? excel_json_data[selectedLanguage + " translationStatus"][i] : "");
-							}
-						}
-					  } else if(s3) {
-						for(var i=string_ids.length-1; i>=0; i--) {
-							if( excel_json_data[selectedLanguage + " text"][i].toLowerCase().includes(s3.toLowerCase()) ) {
-								addRow(excel_json_data["String Identifier"][i], excel_json_data["Source Language Text"][i], excel_json_data[selectedLanguage + " text"] ? excel_json_data[selectedLanguage + " text"][i] : "", excel_json_data[selectedLanguage + " translationStatus"] ? excel_json_data[selectedLanguage + " translationStatus"][i] : "");
-							}
-						}
-					  } 
-					  document.getElementById("row_count").innerText = rowCount == 0 ? '' : rowCount;
+					}
+					document.getElementById("row_count").innerText = rowCount == 0 ? '' : rowCount;
 				  }
 			  }
 			  
