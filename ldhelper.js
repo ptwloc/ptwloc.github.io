@@ -285,7 +285,13 @@
 					}
 				}
 
-				rowCount = allRows.length;
+				rowCount = 0;
+				allRows.map(row => {
+					if(row.trs_stat == 3) {
+						rowCount = rowCount+1;
+					}
+				});
+
 				document.getElementById("pagination").innerHTML = pagination + "/" + maxPagination;
 			}
 			
