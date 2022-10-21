@@ -178,7 +178,7 @@
 					document.getElementById("s_to_check_source").value = element.children.item(1).innerText;
 					document.getElementById("s_to_check_translation").value = element.children.item(2).innerText;
 					checkString();
-					document.getElementById("copied_string_id").innerHTML = element.children.item(0).children.item(0).innerText +
+					document.getElementById("copied_string_id").innerHTML = `<span style="cursor: pointer;" onMouseOver="this.style.color='black'" onMouseOut="this.style.color='grey'" onclick="copyToClipboard(this.innerText)">` + element.children.item(0).children.item(0).innerText + `</span>` +
 																			`<a style="margin-left: 1rem; cursor: pointer;" href="#` + element.children.item(0).children.item(0).innerText +`">Go back to Table</a>`;
 					scrollToTop();
 					copyToClipboard(element.children.item(0).children.item(0).innerText);
