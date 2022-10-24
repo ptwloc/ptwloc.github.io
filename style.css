@@ -212,8 +212,10 @@ input:checked + .slider:before {
   border-color: #54b3d6;
 }
 .file_button {
-  padding: 5px;
+  padding: 5px 10px 5px 10px;
   background: #BCDBEA;
+  color: white;
+  font-weight: bold;
   cursor: pointer;
   border-radius: 6px;
   border: 1px solid #BCDBEA;
