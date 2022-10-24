@@ -9,6 +9,7 @@
 			const span = document.getElementsByClassName("close")[0];
 			var isCheckMode = false;
 			var codeIntegrityCheckResults = {};
+			var dropArea = document.getElementById("drop-area")
 			
 			const rowsPerPage = 500;
 			var allRows = [];
@@ -28,6 +29,72 @@
 			const braces_regex = '\{\{.*?\}\}|\{.*?\}';
 			var	regex = RegExp(square_regex + "|" + angle_regex + "|" + braces_regex, 'g');
 			var rowCount = 0;
+			const translationStatusGreen = 3;
+
+			// Prevent default drag behaviors
+			;['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+				dropArea.addEventListener(eventName, preventDefaults, false)   
+				document.body.addEventListener(eventName, preventDefaults, false)
+			})
+			
+			// Highlight drop area when item is dragged over it
+			;['dragenter', 'dragover'].forEach(eventName => {
+				dropArea.addEventListener(eventName, highlight, false)
+			})
+			
+			;['dragleave', 'drop'].forEach(eventName => {
+				dropArea.addEventListener(eventName, unhighlight, false)
+			})
+			
+			// Handle dropped files
+			dropArea.addEventListener('drop', handleDrop, false)
+			
+			function preventDefaults (e) {
+				e.preventDefault()
+				e.stopPropagation()
+			}
+			
+			function highlight(e) {
+				dropArea.classList.add('highlight')
+			}
+			
+			function unhighlight(e) {
+				dropArea.classList.remove('active')
+			}
+			
+			function handleDrop(e) {
+				var dt = e.dataTransfer
+				var files = dt.files
+				submitFileForm(files);
+			}
+			
+			let uploadProgress = []
+			let progressBar = document.getElementById('progress-bar')
+			
+			function initializeProgress(numFiles) {
+				progressBar.value = 0
+				uploadProgress = []
+			
+				for(let i = numFiles; i > 0; i--) {
+				uploadProgress.push(0)
+				}
+			}
+			
+			function updateProgress(fileNumber, percent) {
+				uploadProgress[fileNumber] = percent
+				let total = uploadProgress.reduce((tot, curr) => tot + curr, 0) / uploadProgress.length
+				progressBar.value = total
+			}
+			
+			function previewFile(file) {
+				let reader = new FileReader()
+				reader.readAsDataURL(file)
+				reader.onloadend = function() {
+				let img = document.createElement('img')
+				img.src = reader.result
+				document.getElementById('gallery').appendChild(img)
+				}
+			}
 			
 			function returnToSearch() {
 				document.getElementById("search_button").hidden = true;
@@ -196,38 +263,36 @@
 			}
 			
 			function addRow(stringId, sourceLanguageText, translationText, translationStatus, errorMessageArray = []) {
-			    if(translationStatus && translationStatus == "3") {
-				  var table = document.querySelector("#result_table>tbody");
-				  var row = table.insertRow(0);
-				  var cell1 = row.insertCell(0);
-				  var cell2 = row.insertCell(1);
-				  var cell3 = row.insertCell(2);
-				  if(isCheckMode) {
-					cell1.parentNode.id = stringId;
-					cell1.innerHTML = `<span onclick="copyToClipboardAndStringChecker(this.parentNode.parentNode)" class="clickable_cell">` + stringId + "</span>";
-				  } else {
-					cell1.innerHTML = `<span onclick="copyToClipboard(this.innerHTML)" class="clickable_cell">` + stringId + "</span>";
-				  }
-				  cell2.innerText = sourceLanguageText;
-				  cell3.innerText = translationText;
+			    var table = document.querySelector("#result_table>tbody");
+				var row = table.insertRow(0);
+				var cell1 = row.insertCell(0);
+				var cell2 = row.insertCell(1);
+				var cell3 = row.insertCell(2);
+				if(isCheckMode) {
+				  cell1.parentNode.id = stringId;
+				  cell1.innerHTML = `<span onclick="copyToClipboardAndStringChecker(this.parentNode.parentNode)" class="clickable_cell">` + stringId + "</span>";
+				} else {
+				  cell1.innerHTML = `<span onclick="copyToClipboard(this.innerHTML)" class="clickable_cell">` + stringId + "</span>";
+				}
+				cell2.innerText = sourceLanguageText;
+				cell3.innerText = translationText;
+				
+				if(errorMessageArray && errorMessageArray.length > 0) {
+				  var cell4 = row.insertCell(3);
 				  
-				  if(errorMessageArray && errorMessageArray.length > 0) {
-					var cell4 = row.insertCell(3);
-					
-					let text = "";
-					
-					for(let i=0; i<errorMessageArray.length; i++) {
-						if(errorMessageArray[i]["language"] == selectedLanguage + " text") {
-							let defect = escapeHtml(errorMessageArray[i].defect);
-							let note = errorMessageArray[i].type == 3 ? "<br>" + escapeHtml(errorMessageArray[i].note) + "<br><br>" + escapeHtml(errorMessageArray[i].note2) : errorMessageArray[i].note;
-							text += `${defect}`
-							text += `<br><span style='color: grey; font-weight: bold; font-size: 0.9rem;'>${note}</span><br><br>`;
-						}
-					}
-					
-					cell4.innerHTML = text;
+				  let text = "";
+				  
+				  for(let i=0; i<errorMessageArray.length; i++) {
+					  if(errorMessageArray[i]["language"] == selectedLanguage + " text") {
+						  let defect = escapeHtml(errorMessageArray[i].defect);
+						  let note = errorMessageArray[i].type == 3 ? "<br>" + escapeHtml(errorMessageArray[i].note) + "<br><br>" + escapeHtml(errorMessageArray[i].note2) : errorMessageArray[i].note;
+						  text += `${defect}`
+						  text += `<br><span style='color: grey; font-weight: bold; font-size: 0.9rem;'>${note}</span><br><br>`;
+					  }
 				  }
-			    }
+				  
+				  cell4.innerHTML = text;
+				}
 			}
 
 			function removeAllRows() {
@@ -287,9 +352,7 @@
 
 				rowCount = 0;
 				allRows.map(row => {
-					if(row.trs_stat == 3) {
-						rowCount = rowCount+1;
-					}
+					rowCount = rowCount+1;
 				});
 
 				document.getElementById("pagination").innerHTML = pagination + "/" + maxPagination;
@@ -310,7 +373,8 @@
 					for(var i=string_ids.length-1; i>=0; i--) {
 						if( (s1 ? excel_json_data["String Identifier"][i].toLowerCase().includes(s1.toLowerCase()) : true) &&
 							(s2 ? excel_json_data["Source Language Text"][i].toLowerCase().includes(s2.toLowerCase()) : true) &&
-							(s3 ? excel_json_data[selectedLanguage + " text"][i].toLowerCase().includes(s3.toLowerCase()) : true) ) {
+							(s3 ? excel_json_data[selectedLanguage + " text"][i].toLowerCase().includes(s3.toLowerCase()) : true) &&
+							(excel_json_data[selectedLanguage + " translationStatus"][i] == translationStatusGreen) ) {
 							
 							rows.push({
 								string_id: excel_json_data["String Identifier"][i],
@@ -556,7 +620,7 @@
 						}
 					});
 					
-					if(language_is_affected) {
+					if(language_is_affected && codeIntegrityCheckResults.failed_strings[i][selectedLanguage + " translationStatus"] == translationStatusGreen) {
 						rows.push({
 							string_id: codeIntegrityCheckResults.failed_strings[i]["String Identifier"],
 							src_text: codeIntegrityCheckResults.failed_strings[i]["Source Language Text"],
@@ -643,8 +707,8 @@
 							}
                             
                             // (B3) READ DATA ROWS
-                            for (let row=range.s.r + 1; row<=range.e.r; row++) {
-                                for (let col=range.s.c; col<=range.e.c; col++) {
+							for (let row=range.s.r + 1; row<=range.e.r; row++) {
+								for (let col=range.s.c; col<=range.e.c; col++) {
                                     let cell = worksheet[XLSX.utils.encode_cell({r:row, c:col})];
                                     let value = cell ? cell.v : '';
                                     data[keys[col]].push(value);
@@ -666,6 +730,9 @@
                             handleFileLoadError(e);
                         }
                     });
+
+					document.getElementById("file_name_display").innerHTML = document.getElementById('file_input').files[0].name;
+					document.getElementById("file_name_display").hidden = false;
                 
                     // (C) START - READ SELECTED EXCEL FILE
                     reader.readAsArrayBuffer(file);
@@ -690,7 +757,10 @@
                 setTimeout(onSubmitFile, 100);
             });
 
-            function submitFileForm() {
+            function submitFileForm(files = null) {
+				if(files) {
+					document.getElementById('file_input').files = files;
+				}
                 document.getElementById("file_form").requestSubmit();
             }
 			

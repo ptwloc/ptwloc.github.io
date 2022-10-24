@@ -10,7 +10,7 @@
 		<link rel="stylesheet" href="./style.css">
 	</head>
 	<body style="background: #EAEDF1; padding: 50px; font-family: Arial, Helvetica, sans-serif;">
-		<p style="position: absolute; right: 50px; top: 1rem; font-size: .8rem; cursor: pointer;" onclick="easterEgg()">@LD Helper Alpha 2.4.3 By Heechan</p>
+		<p style="position: absolute; right: 50px; top: 1rem; font-size: .8rem; cursor: pointer;" onclick="easterEgg()">@LD Helper Alpha 2.4.4 By Heechan</p>
 		<div style="display: flex; flex-direction: col; align-items: center;">
 			<img src="./icon.png" alt="LD Helper" width="30px" height="30px" />
 			<h5 style="margin: 5px; color: grey;">Press ESC to clear all inputs</h5>
@@ -46,10 +46,14 @@
 		
 		<div style="display: flex; flex-direction: col; align-items: center;">
 			<div style="flex: 1; display: flex; flex-direction: col; align-items: center;">
-				<h3 style="margin-left: 5px;">Search Source text&nbsp;</h3>
-				<form id="file_form">
-					<input type="file" id="file_input" style="margin-left: 10px;" accept=".xls,.xlsx" onchange="submitFileForm()"/>
-				</form>
+				<h3 style="margin-left: 5px; flex:1;">Search Source text&nbsp;</h3>
+				<div id="drop-area" style="flex:2;">
+					<form id="file_form" class="my-form">
+					  <input type="file" id="file_input" accept=".xls,.xlsx" onchange="submitFileForm()"/>
+					  <label class="file_button" for="file_input">Select a file</label> or Drag and Drop here
+					</form>
+					<div id="file_name_display" hidden></div>
+				</div>
 			</div>
 			<div style="flex: 1;" class="popup arrow-left"><div class="popup-wrapper" id="upload_status" onclick="onClickHelp()">
 				<span><span style="color: orange; font-size: 0.8rem; margin: 0 10px 0 0;">[New Updates]</span> Please read me before you add an Excel file</span>
