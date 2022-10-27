@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>LD Helper</title>
+		<meta charset="UTF-8">
+		<meta name="description" content="LD helper">
+		<meta name="author" content="Heechan Yang">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="icon" type="image/x-icon" href="./assets/ldhelpericon.png">
+		<link rel="stylesheet" href="./css/ldhelper.css">
+	</head>
+	<body style="background: #EAEDF1; padding: 50px; font-family: Arial, Helvetica, sans-serif;">
+		<p style="position: absolute; right: 60px; top: 1rem; font-size: .8rem; cursor: pointer;" onclick="easterEgg()">@LD Helper Alpha 2.4.4 By Heechan</p>
+		<div style="display: flex; flex-direction: col; align-items: center;">
+			<img src="./assets/ldhelpericon.png" alt="LD Helper" width="30px" height="30px" />
+			<h5 style="margin: 5px; color: grey;">Press ESC to clear all inputs / <a href="./index.html">Go Back to Loc Helper</a></h5>
+		</div>
+		<div style="display: flex; flex-direction: col; margin-top: 20px; margin-bottom: 40px; width: 100%;">
+			<div style="flex:1;">
+				<h3 style="margin-left: 5px;">String to clean</h3>
+				<textarea rows="10" cols="100" id="s_to_clean" class="s_to_clean" value="" onkeyup="cleanString()"></textarea>
+			</div>
+			<div style="flex:1;">
+				<h3 style="margin-left: 5px;">String cleaned (Copy on click)</h3>
+				<textarea rows="10" cols="100" id="s_cleaned" class="s_cleaned copiable" value="" onclick="copyToClipboard(this.value)"></textarea>
+			</div>
+		</div>
+		
+		<div style="display: none; flex-direction: col; margin-bottom: 40px; width: 100%;" id="s_to_check">
+			<div style="flex:1;">
+				<h3 style="margin-left: 5px;">Source Language Text<span style="margin-left: 1rem; color: grey; font-size: 0.9rem; font-weight: normal;" id="copied_string_id">Type here or click on String ID from the table</span></h3>
+				<textarea rows="10" cols="100" id="s_to_check_source" class="s_to_clean" value="" onkeyup="checkString(true)"></textarea>
+			</div>
+			<div style="flex:1;">
+				<h3 style="margin-left: 5px;">Translation Text</h3>
+				<textarea rows="10" cols="100" id="s_to_check_translation" class="s_to_clean" value="" onkeyup="checkString()"></textarea>
+			</div>
+			<div style="flex:1;">
+				<div style="display: flex; flex-direction: col; align-items: center;">
+					<h3 style="margin-left: 5px;">LD Helper Comments</h3>
+					<div id="s_to_check_flag"></div>
+				</div>
+				<textarea disabled style="background: white; cursor: auto !important;" rows="10" cols="100" id="s_to_check_comments" value=""></textarea>
+			</div>
+		</div>
+		
+		<div style="display: flex; flex-direction: col; align-items: center;">
+			<div style="flex: 1; display: flex; flex-direction: col; align-items: center;">
+				<h3 style="margin-left: 5px; flex:1;">Search Source text&nbsp;</h3>
+				<div id="drop-area" style="flex:2;">
+					<form id="file_form" class="my-form">
+					  <input type="file" id="file_input" accept=".xls,.xlsx" onchange="submitFileForm()"/>
+					  <label class="file_button" for="file_input">Select a file</label> or Drag and Drop here
+					</form>
+					<div id="file_name_display" hidden></div>
+				</div>
+			</div>
+			<div style="flex: 1;" class="popup arrow-left"><div class="popup-wrapper" id="upload_status" onclick="onClickHelp()">
+				<span><span style="color: orange; font-size: 0.8rem; margin: 0 10px 0 0;">[New Updates]</span> Please read me before you add an Excel file</span>
+				<button class="help-button">?</button>
+			</div></div>
+			<div style="flex: 1; justify-content: flex-end; display: flex; justify-content: flex-end;">
+				<button hidden id="search_button" class="plain_button" onclick="returnToSearch()">
+					Return to Consistency Search Table
+				</button>
+				<button hidden id="check_button" class="plain_button" onclick="getCodeIntegrityCheckResults()">
+					Run Code Integrity Check on this Project
+				</button>
+			</div>
+		</div>
+			
+		<div style="display: none; flex-direction: col; align-items: center;" id="code_selector">
+			<h3 style="margin-left: 5px;">Select Code Brackets for this Project</h3>
+			<div style="flex:1; margin-left: 10%; display: flex; flex-direction: col; justify-content: space-between;">
+				<div style="display: flex; flex-direction: col; align-items: center;">
+					<label class="switch">
+					  <input type="checkbox" checked id="angle_brackets_checkbox" onchange="onCheckBrackets(this)">
+					  <span class="slider"></span>
+					</label>
+					<h3 style="margin-left: 20px;">&lt;Code&gt;</h3>
+				</div>
+				<div style="display: flex; flex-direction: col; align-items: center;">
+					<label class="switch">
+					  <input type="checkbox" checked id="square_brackets_checkbox" onchange="onCheckBrackets(this)">
+					  <span class="slider"></span>
+					</label>
+					<h3 style="margin-left: 20px;">[Code]</h3>
+				</div>
+				<div style="display: flex; flex-direction: col; align-items: center;">
+					<label class="switch">
+					  <input type="checkbox" checked id="braces_checkbox" onchange="onCheckBrackets(this)">
+					  <span class="slider"></span>
+					</label>
+					<h3 style="margin-left: 20px;">{Code}</h3>
+				</div>
+				<div></div>
+			</div>
+		</div>
+
+		<div style="display: flex; flex-direction: col; justify-content: flex-end; align-items: center;">
+			<div style="width: 11px; height: 11px; background-color: green; border-radius: 50%;"></div>
+			<p style="margin-left: 0.5rem; font-size: 0.9rem;">LD Helper will only display <span style="color: green; font-weight: bold;">Green</span> translation status strings.</p>
+		</div>
+		
+		<table id="result_table">
+			<thead>
+				<tr>
+					<th><b>String ID (Copy on click)</b></th>
+					<th><b>Source text</b>&nbsp;&nbsp;<span id="row_count" style="font-size: 1rem; font-weight: normal; color: grey;"></span></th>
+					<th>
+						<select id="language_select" onchange="switchLanguage()">
+							<option value="Select">Please load Excel file</option>
+						</select>
+					</th>
+					<th hidden id="bot_comments"><b>LD Helper Comments</b></th>
+				</tr>
+				<tr id="search_row">
+					<td><input onkeyup="searchForConsistency()" type="text" id="s_search1" class="searchInput" placeholder="Search" onkeydown="return (event.keyCode!=13);"></td>
+					<td><input onkeyup="searchForConsistency()" type="text" id="s_search2" class="searchInput" placeholder="Search" onkeydown="return (event.keyCode!=13);"></td>
+					<td><input onkeyup="searchForConsistency()" type="text" id="s_search3" class="searchInput" placeholder="Search" onkeydown="return (event.keyCode!=13);"></td>
+				</tr>
+			</thead>
+			<tbody></tbody>
+		</table>
+		<div id="pagination" onclick="firstOrLastPage()">0/0</div>
+		<div id="prev_page" onclick="prevPage()">&lt;</div>
+		<div id="next_page" onclick="nextPage()">&gt;</div>
+		<br><br><br>
+		
+		<div id="help_modal" class="modal">
+		  <div class="modal-content">
+			<br>
+			<span class="close">&times;</span>
+			<h3>How to export Excel file from LocDirect</h3>
+			<br>
+			<ol style="margin-bottom: 1rem;">
+				<li style="margin-bottom: 1rem;">In LocDirect, <b>right click</b> on the <b>Strings folder</b> on the left pane</li>
+				<li style="margin-bottom: 1rem;">Click on <b>Export Strings</b> and hit <b>Next</b></li>
+				<li style="margin-bottom: 1rem;">Under Export Columns, <b>add</b> your language's <b style="color: orange">Translation Text</b>, your language's <b style="color: orange">Target Language Status</b> and hit <b>Start</b> <br>(ex. French Translation Text & French Target Language Status)</li>
+				<li style="margin-bottom: 1rem;">Type <b>File Name</b> as any_name<b>.xlsx</b> and select <b>Files of Type</b> as <b>Microsoft Excel (*.xlsx)</b> and <b>Save</b> the file in your preferred location</li>
+				<li style="margin-bottom: 1rem;">If the downloaded file is missing a file extension, <b>rename</b> the downloaded <b>file</b> to have <b>.xlsx extension</b>. (ex. any_name.xlsx)</li>
+			</ol>
+			<br>
+			<br>
+			<br>
+			<h3>Troubleshooting</h3>
+			<p>If your LD excel file is not working, please make sure that it has the following column names in the first row. (case-sensitive)</p>
+			<p>These column names are auto-generated by LD and usually always be this way upon Export Strings.</p>
+			<br>
+			<ul>
+				<li style="margin-bottom: 1rem;"><b>String Identifier</b></li>
+			    <li style="margin-bottom: 1rem;"><b>Source Language Text</b></li>
+			    <li style="margin-bottom: 1rem;"><span style="color: grey">Your language</span><b> text</b></li>
+			    <li style="margin-bottom: 1rem;"><span style="color: grey">Your language</span><b> translationStatus</b></li>
+			</ul>
+			<br>
+			<br>
+			<br>
+			<h3>Contact</h3>
+			<img src="./assets/ldhelpericon.png" alt="LD Helper" width="20" height="20" style="position: absolute;" />
+			<p style="margin-left: 2rem;">Please DM <b style="color: #ffc90d">Heechan</b> from LQA Team 4 by Slack/Teams if you have any questions.</p>
+			<br>
+		  </div>
+		</div>
+		
+		<div id="snackbar">Copied to your clipboard!</div>
+	</body>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+	<script src="./js/ldhelper.js"></script>
+</html>

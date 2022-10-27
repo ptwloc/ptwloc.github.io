@@ -1,170 +1,510 @@
 <!DOCTYPE html>
-<html>
-	<head>
-		<title>LD Helper</title>
-		<meta charset="UTF-8">
-		<meta name="description" content="LD helper">
-		<meta name="author" content="Heechan Yang">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<link rel="icon" type="image/x-icon" href="./icon.png">
-		<link rel="stylesheet" href="./style.css">
-	</head>
-	<body style="background: #EAEDF1; padding: 50px; font-family: Arial, Helvetica, sans-serif;">
-		<p style="position: absolute; right: 50px; top: 1rem; font-size: .8rem; cursor: pointer;" onclick="easterEgg()">@LD Helper Alpha 2.4.4 By Heechan</p>
-		<div style="display: flex; flex-direction: col; align-items: center;">
-			<img src="./icon.png" alt="LD Helper" width="30px" height="30px" />
-			<h5 style="margin: 5px; color: grey;">Press ESC to clear all inputs</h5>
-		</div>
-		<div style="display: flex; flex-direction: col; margin-top: 20px; margin-bottom: 40px; width: 100%;">
-			<div style="flex:1;">
-				<h3 style="margin-left: 5px;">String to clean</h3>
-				<textarea rows="10" cols="100" id="s_to_clean" class="s_to_clean" value="" onkeyup="cleanString()"></textarea>
-			</div>
-			<div style="flex:1;">
-				<h3 style="margin-left: 5px;">String cleaned (Copy on click)</h3>
-				<textarea rows="10" cols="100" id="s_cleaned" class="s_cleaned copiable" value="" onclick="copyToClipboard(this.value)"></textarea>
-			</div>
-		</div>
-		
-		<div style="display: none; flex-direction: col; margin-bottom: 40px; width: 100%;" id="s_to_check">
-			<div style="flex:1;">
-				<h3 style="margin-left: 5px;">Source Language Text<span style="margin-left: 1rem; color: grey; font-size: 0.9rem; font-weight: normal;" id="copied_string_id">Type here or click on String ID from the table</span></h3>
-				<textarea rows="10" cols="100" id="s_to_check_source" class="s_to_clean" value="" onkeyup="checkString(true)"></textarea>
-			</div>
-			<div style="flex:1;">
-				<h3 style="margin-left: 5px;">Translation Text</h3>
-				<textarea rows="10" cols="100" id="s_to_check_translation" class="s_to_clean" value="" onkeyup="checkString()"></textarea>
-			</div>
-			<div style="flex:1;">
-				<div style="display: flex; flex-direction: col; align-items: center;">
-					<h3 style="margin-left: 5px;">LD Helper Comments</h3>
-					<div id="s_to_check_flag"></div>
-				</div>
-				<textarea disabled style="background: white; cursor: auto !important;" rows="10" cols="100" id="s_to_check_comments" value=""></textarea>
-			</div>
-		</div>
-		
-		<div style="display: flex; flex-direction: col; align-items: center;">
-			<div style="flex: 1; display: flex; flex-direction: col; align-items: center;">
-				<h3 style="margin-left: 5px; flex:1;">Search Source text&nbsp;</h3>
-				<div id="drop-area" style="flex:2;">
-					<form id="file_form" class="my-form">
-					  <input type="file" id="file_input" accept=".xls,.xlsx" onchange="submitFileForm()"/>
-					  <label class="file_button" for="file_input">Select a file</label> or Drag and Drop here
-					</form>
-					<div id="file_name_display" hidden></div>
-				</div>
-			</div>
-			<div style="flex: 1;" class="popup arrow-left"><div class="popup-wrapper" id="upload_status" onclick="onClickHelp()">
-				<span><span style="color: orange; font-size: 0.8rem; margin: 0 10px 0 0;">[New Updates]</span> Please read me before you add an Excel file</span>
-				<button class="help-button">?</button>
-			</div></div>
-			<div style="flex: 1; justify-content: flex-end; display: flex; justify-content: flex-end;">
-				<button hidden id="search_button" class="plain_button" onclick="returnToSearch()">
-					Return to Consistency Search Table
-				</button>
-				<button hidden id="check_button" class="plain_button" onclick="getCodeIntegrityCheckResults()">
-					Run Code Integrity Check on this Project
-				</button>
-			</div>
-		</div>
-			
-		<div style="display: none; flex-direction: col; align-items: center;" id="code_selector">
-			<h3 style="margin-left: 5px;">Select Code Brackets for this Project</h3>
-			<div style="flex:1; margin-left: 10%; display: flex; flex-direction: col; justify-content: space-between;">
-				<div style="display: flex; flex-direction: col; align-items: center;">
-					<label class="switch">
-					  <input type="checkbox" checked id="angle_brackets_checkbox" onchange="onCheckBrackets(this)">
-					  <span class="slider"></span>
-					</label>
-					<h3 style="margin-left: 20px;">&lt;Code&gt;</h3>
-				</div>
-				<div style="display: flex; flex-direction: col; align-items: center;">
-					<label class="switch">
-					  <input type="checkbox" checked id="square_brackets_checkbox" onchange="onCheckBrackets(this)">
-					  <span class="slider"></span>
-					</label>
-					<h3 style="margin-left: 20px;">[Code]</h3>
-				</div>
-				<div style="display: flex; flex-direction: col; align-items: center;">
-					<label class="switch">
-					  <input type="checkbox" checked id="braces_checkbox" onchange="onCheckBrackets(this)">
-					  <span class="slider"></span>
-					</label>
-					<h3 style="margin-left: 20px;">{Code}</h3>
-				</div>
-				<div></div>
-			</div>
-		</div>
+<html lang="en" class="">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Loc Helper</title>
 
-		<div style="display: flex; flex-direction: col; justify-content: flex-end; align-items: center;">
-			<div style="width: 11px; height: 11px; background-color: green; border-radius: 50%;"></div>
-			<p style="margin-left: 0.5rem; font-size: 0.9rem;">LD Helper will only display <span style="color: green; font-weight: bold;">Green</span> translation status strings.</p>
-		</div>
-		
-		<table id="result_table">
-			<thead>
-				<tr>
-					<th><b>String ID (Copy on click)</b></th>
-					<th><b>Source text</b>&nbsp;&nbsp;<span id="row_count" style="font-size: 1rem; font-weight: normal; color: grey;"></span></th>
-					<th>
-						<select id="language_select" onchange="switchLanguage()">
-							<option value="Select">Please load Excel file</option>
-						</select>
-					</th>
-					<th hidden id="bot_comments"><b>LD Helper Comments</b></th>
-				</tr>
-				<tr id="search_row">
-					<td><input onkeyup="searchForConsistency()" type="text" id="s_search1" class="searchInput" placeholder="Search" onkeydown="return (event.keyCode!=13);"></td>
-					<td><input onkeyup="searchForConsistency()" type="text" id="s_search2" class="searchInput" placeholder="Search" onkeydown="return (event.keyCode!=13);"></td>
-					<td><input onkeyup="searchForConsistency()" type="text" id="s_search3" class="searchInput" placeholder="Search" onkeydown="return (event.keyCode!=13);"></td>
-				</tr>
-			</thead>
-			<tbody></tbody>
-		</table>
-		<div id="pagination" onclick="firstOrLastPage()">0/0</div>
-		<div id="prev_page" onclick="prevPage()">&lt;</div>
-		<div id="next_page" onclick="nextPage()">&gt;</div>
-		<br><br><br>
-		
-		<div id="help_modal" class="modal">
-		  <div class="modal-content">
-			<br>
-			<span class="close">&times;</span>
-			<h3>How to export Excel file from LocDirect</h3>
-			<br>
-			<ol style="margin-bottom: 1rem;">
-				<li style="margin-bottom: 1rem;">In LocDirect, <b>right click</b> on the <b>Strings folder</b> on the left pane</li>
-				<li style="margin-bottom: 1rem;">Click on <b>Export Strings</b> and hit <b>Next</b></li>
-				<li style="margin-bottom: 1rem;">Under Export Columns, <b>add</b> your language's <b style="color: orange">Translation Text</b>, your language's <b style="color: orange">Target Language Status</b> and hit <b>Start</b> <br>(ex. French Translation Text & French Target Language Status)</li>
-				<li style="margin-bottom: 1rem;">Type <b>File Name</b> as any_name<b>.xlsx</b> and select <b>Files of Type</b> as <b>Microsoft Excel (*.xlsx)</b> and <b>Save</b> the file in your preferred location</li>
-				<li style="margin-bottom: 1rem;">If the downloaded file is missing a file extension, <b>rename</b> the downloaded <b>file</b> to have <b>.xlsx extension</b>. (ex. any_name.xlsx)</li>
-			</ol>
-			<br>
-			<br>
-			<br>
-			<h3>Troubleshooting</h3>
-			<p>If your LD excel file is not working, please make sure that it has the following column names in the first row. (case-sensitive)</p>
-			<p>These column names are auto-generated by LD and usually always be this way upon Export Strings.</p>
-			<br>
-			<ul>
-				<li style="margin-bottom: 1rem;"><b>String Identifier</b></li>
-			    <li style="margin-bottom: 1rem;"><b>Source Language Text</b></li>
-			    <li style="margin-bottom: 1rem;"><span style="color: grey">Your language</span><b> text</b></li>
-			    <li style="margin-bottom: 1rem;"><span style="color: grey">Your language</span><b> translationStatus</b></li>
-			</ul>
-			<br>
-			<br>
-			<br>
-			<h3>Contact</h3>
-			<img src="./icon.png" alt="LD Helper" width="20" height="20" style="position: absolute;" />
-			<p style="margin-left: 2rem;">Please DM <b style="color: #ffc90d">Heechan</b> from LQA Team 4 by Slack/Teams if you have any questions.</p>
-			<br>
+  <!-- Tailwind is included -->
+  <link rel="stylesheet" href="css/tailwind.css?v=1628755089081">
+  <link rel="stylesheet" href="css/gridlyhelper.css">
+
+  <link rel="icon" type="image/png" sizes="32x32" href="./assets/gridlyhelpericon.png"/>
+
+  <meta name="description" content="Loc Helper">
+</head>
+<body>
+
+<div id="app">
+
+<nav id="navbar-main" class="navbar is-fixed-top">
+  <div class="navbar-brand is-right">
+    <a class="navbar-item --jb-navbar-menu-toggle" data-target="navbar-menu">
+      <span class="icon"><i class="mdi mdi-dots-vertical mdi-24px"></i></span>
+    </a>
+  </div>
+  <div class="navbar-menu" id="navbar-menu">
+    <div class="navbar-end">
+      <div class="navbar-item dropdown has-divider has-user-avatar">
+        <a class="navbar-link">
+          <div class="user-avatar">
+            <img src="./assets/usericon.png" alt="John Doe" class="rounded-full">
+          </div>
+          <div class="is-user-name"><span>Sample User</span></div>
+          <span class="icon"><i class="mdi mdi-chevron-down"></i></span>
+        </a>
+        <div class="navbar-dropdown">
+          <a class="navbar-item">
+            <span class="icon"><i class="mdi mdi-logout"></i></span>
+            <span>Log Out</span>
+          </a>
+        </div>
+      </div>
+      <a href="#" title="Log out" class="navbar-item">
+        <span class="icon"><i class="mdi mdi-login"></i></span>
+        <span>Okta Log in</span>
+      </a>
+    </div>
+  </div>
+</nav>
+
+<aside class="aside is-placed-left is-expanded">
+  <div class="aside-tools">
+    <div>
+		Project <b class="font-black">Sample</b>
+    </div>
+  </div>
+  <div class="menu is-menu-main">
+    <p class="menu-label">Gridly</p>
+    <ul class="menu-list">
+      <li class="active">
+        <a href="index.html">
+          <span class="icon"><i class="mdi mdi-monitor"></i></span>
+          <span class="menu-item-label">Projects</span>
+        </a>
+      </li>
+    </ul>
+    <p class="menu-label">User</p>
+    <ul class="menu-list">
+      <li class="--set-active-profile-html">
+        <a href="#">
+          <span class="icon"><i class="mdi mdi-table"></i></span>
+          <span class="menu-item-label">Dataview</span>
+        </a>
+      </li>
+      <li class="--set-active-forms-html">
+        <a href="#">
+          <span class="icon"><i class="mdi mdi-alpha-t-box-outline"></i></span>
+          <span class="menu-item-label">Testplan</span>
+        </a>
+      </li>
+      <li class="--set-active-forms-html">
+        <a href="#">
+          <span class="icon"><i class="mdi mdi-alpha-c-box-outline"></i></span>
+          <span class="menu-item-label">Crosschecking</span>
+        </a>
+      </li>
+      <li class="--set-active-forms-html">
+        <a href="#">
+          <span class="icon"><i class="mdi mdi-alpha-r-box-outline"></i></span>
+          <span class="menu-item-label">Regression</span>
+        </a>
+      </li>
+      <li class="--set-active-tables-html">
+        <a href="#">
+          <span class="icon"><i class="mdi mdi-feature-search-outline"></i></span>
+          <span class="menu-item-label">Code Check</span>
+        </a>
+      </li>
+    </ul>
+    <p class="menu-label">Admin</p>
+    <ul class="menu-list">
+      <li>
+        <a href="#" class="has-icon">
+          <span class="icon"><i class="mdi mdi-alpha-t-box"></i></span>
+          <span class="menu-item-label">Manage Testplan</span>
+        </a>
+      </li>
+      <li>
+        <a href="#" class="has-icon">
+          <span class="icon"><i class="mdi mdi-alpha-c-box"></i></span>
+          <span class="menu-item-label">Manage Crosschecking</span>
+        </a>
+      </li>
+      <li>
+        <a href="#" class="has-icon">
+          <span class="icon"><i class="mdi mdi-alpha-r-box"></i></span>
+          <span class="menu-item-label">Manage Regression</span>
+        </a>
+      </li>
+    </ul>
+    <p class="menu-label">Legacy</p>
+    <ul class="menu-list">
+      <li>
+        <a href="./ldhelper.html" class="has-icon">
+          <span class="icon"><i class="mdi mdi-arrow-left-bold-outline"></i></span>
+          <span class="menu-item-label">LD Helper</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</aside>
+
+<section class="is-title-bar">
+  <div class="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
+    <ul>
+      <li>Gridly</li>
+      <li>Projects</li>
+    </ul>
+  </div>
+</section>
+
+<div class="notification blue">
+  <div class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0">
+	<div>
+	  <span class="icon"><i class="mdi mdi-cursor-pointer"></i></span>
+	  <b>Select Your Project</b>
+	</div>
+	<button type="button" class="--jb-notification-dismiss">X</button>
+  </div>
+</div>
+
+<section class="is-hero-bar">
+  <div class="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
+    <h1 class="title">
+      Sample
+    </h1>
+    <button class="button light"><span class="icon"><i class="mdi mdi-chevron-up"></i></span>Hide</button>
+  </div>
+</section>
+
+  <section class="section main-section">
+
+    <div class="grid gap-6 grid-cols-1 md:grid-cols-3 mb-6">
+      <div class="card">
+        <div class="card-content">
+          <div class="flex items-center justify-between">
+            <div class="widget-label">
+              <h3>
+                Sample Project
+              </h3>
+              <h1>
+                VO
+              </h1>
+            </div>
+            <span class="icon widget-icon text-green-500"><i class="mdi mdi-application mdi-48px"></i></span>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-content">
+          <div class="flex items-center justify-between">
+            <div class="widget-label">
+              <h3>
+                Sample Project
+              </h3>
+              <h1>
+                Achievements
+              </h1>
+            </div>
+            <span class="icon widget-icon text-red-500"><i class="mdi mdi-application mdi-48px"></i></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-content">
+          <div class="flex items-center justify-between">
+            <div class="widget-label">
+              <h3>
+                Sample Project
+              </h3>
+              <h1>
+                UI
+              </h1>
+            </div>
+            <span class="icon widget-icon text-red-500"><i class="mdi mdi-application mdi-48px"></i></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-content">
+          <div class="flex items-center justify-between">
+            <div class="widget-label">
+              <h3>
+                Sample Project
+              </h3>
+              <h1>
+                Project
+              </h1>
+            </div>
+            <span class="icon widget-icon text-blue-500"><i class="mdi mdi-application mdi-48px"></i></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card has-table">
+      <header class="card-header">
+        <p class="card-header-title">
+          <span class="icon"><i class="mdi mdi-monitor"></i></span>
+          My Projects
+        </p>
+        <a href="#" class="card-header-icon">
+          <span class="icon"><i class="mdi mdi-reload"></i></span>
+        </a>
+      </header>
+      <div class="card-content">
+        <table>
+          <thead>
+          <tr>
+            <th></th>
+            <th>Project Name</th>
+            <th>Description</th>
+            <th>Author</th>
+            <th>Created on</th>
+            <th></th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td class="image-cell">
+              <div class="image">
+                <span class="icon text-green-500"><i class="mdi mdi-folder"></i></span>
+              </div>
+            </td>
+            <td data-label="Name">Sample</td>
+            <td data-label="Company"></td>
+            <td data-label="City">Heechan Yang</td>
+            <td data-label="Created">
+              <small class="text-gray-500" title="Oct 25, 2021">July 13, 2020</small>
+            </td>
+            <td class="actions-cell">
+              <div class="buttons right nowrap">
+                <button class="button small green --jb-modal"  data-target="sample-modal" type="button">
+                  <span class="icon"><i class="mdi mdi-eye"></i></span>
+                </button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="image-cell">
+              <div class="image">
+                <span class="icon text-green-500"><i class="mdi mdi-folder"></i></span>
+              </div>
+            </td>
+            <td data-label="Name">Felicita Yundt</td>
+            <td data-label="Company">Johns-Weissnat</td>
+            <td data-label="City">East Ariel</td>
+            <td data-label="Created">
+              <small class="text-gray-500" title="Jan 8, 2021">Jan 8, 2021</small>
+            </td>
+            <td class="actions-cell">
+              <div class="buttons right nowrap">
+                <button class="button small green --jb-modal"  data-target="sample-modal" type="button">
+                  <span class="icon"><i class="mdi mdi-eye"></i></span>
+                </button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="image-cell">
+              <div class="image">
+                <span class="icon text-green-500"><i class="mdi mdi-folder"></i></span>
+              </div>
+            </td>
+            <td data-label="Name">Mr. Larry Satterfield V</td>
+            <td data-label="Company">Hyatt Ltd</td>
+            <td data-label="City">Windlerburgh</td>
+            <td data-label="Created">
+              <small class="text-gray-500" title="Dec 18, 2021">Dec 18, 2021</small>
+            </td>
+            <td class="actions-cell">
+              <div class="buttons right nowrap">
+                <button class="button small green --jb-modal"  data-target="sample-modal" type="button">
+                  <span class="icon"><i class="mdi mdi-eye"></i></span>
+                </button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="image-cell">
+              <div class="image">
+                <span class="icon text-green-500"><i class="mdi mdi-folder"></i></span>
+              </div>
+            </td>
+            <td data-label="Name">Mr. Broderick Kub</td>
+            <td data-label="Company">Kshlerin, Bauch and Ernser</td>
+            <td data-label="City">New Kirstenport</td>
+            <td data-label="Created">
+              <small class="text-gray-500" title="Sep 13, 2021">Sep 13, 2021</small>
+            </td>
+            <td class="actions-cell">
+              <div class="buttons right nowrap">
+                <button class="button small green --jb-modal"  data-target="sample-modal" type="button">
+                  <span class="icon"><i class="mdi mdi-eye"></i></span>
+                </button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="image-cell">
+              <div class="image">
+                <span class="icon text-green-500"><i class="mdi mdi-folder"></i></span>
+              </div>
+            </td>
+            <td data-label="Name">Barry Weber</td>
+            <td data-label="Company">Schulist, Mosciski and Heidenreich</td>
+            <td data-label="City">East Violettestad</td>
+            <td data-label="Created">
+              <small class="text-gray-500" title="Jul 24, 2021">Jul 24, 2021</small>
+            </td>
+            <td class="actions-cell">
+              <div class="buttons right nowrap">
+                <button class="button small green --jb-modal"  data-target="sample-modal" type="button">
+                  <span class="icon"><i class="mdi mdi-eye"></i></span>
+                </button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="image-cell">
+              <div class="image">
+                <span class="icon text-green-500"><i class="mdi mdi-folder"></i></span>
+              </div>
+            </td>
+            <td data-label="Name">Bert Kautzer MD</td>
+            <td data-label="Company">Gerhold and Sons</td>
+            <td data-label="City">Mayeport</td>
+            <td data-label="Created">
+              <small class="text-gray-500" title="Mar 30, 2021">Mar 30, 2021</small>
+            </td>
+            <td class="actions-cell">
+              <div class="buttons right nowrap">
+                <button class="button small green --jb-modal"  data-target="sample-modal" type="button">
+                  <span class="icon"><i class="mdi mdi-eye"></i></span>
+                </button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="image-cell">
+              <div class="image">
+                <span class="icon text-green-500"><i class="mdi mdi-folder"></i></span>
+              </div>
+            </td>
+            <td data-label="Name">Lonzo Steuber</td>
+            <td data-label="Company">Skiles Ltd</td>
+            <td data-label="City">Marilouville</td>
+            <td data-label="Created">
+              <small class="text-gray-500" title="Feb 12, 2021">Feb 12, 2021</small>
+            </td>
+            <td class="actions-cell">
+              <div class="buttons right nowrap">
+                <button class="button small green --jb-modal"  data-target="sample-modal" type="button">
+                  <span class="icon"><i class="mdi mdi-eye"></i></span>
+                </button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="image-cell">
+              <div class="image">
+                <span class="icon text-green-500"><i class="mdi mdi-folder"></i></span>
+              </div>
+            </td>
+            <td data-label="Name">Jonathon Hahn</td>
+            <td data-label="Company">Flatley Ltd</td>
+            <td data-label="City">Billiemouth</td>
+            <td data-label="Created">
+              <small class="text-gray-500" title="Dec 30, 2021">Dec 30, 2021</small>
+            </td>
+            <td class="actions-cell">
+              <div class="buttons right nowrap">
+                <button class="button small green --jb-modal"  data-target="sample-modal" type="button">
+                  <span class="icon"><i class="mdi mdi-eye"></i></span>
+                </button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="image-cell">
+              <div class="image">
+                <span class="icon text-green-500"><i class="mdi mdi-folder"></i></span>
+              </div>
+            </td>
+            <td data-label="Name">Ryley Wuckert</td>
+            <td data-label="Company">Heller-Little</td>
+            <td data-label="City">Emeraldtown</td>
+            <td data-label="Created">
+              <small class="text-gray-500" title="Jun 28, 2021">Jun 28, 2021</small>
+            </td>
+            <td class="actions-cell">
+              <div class="buttons right nowrap">
+                <button class="button small green --jb-modal"  data-target="sample-modal" type="button">
+                  <span class="icon"><i class="mdi mdi-eye"></i></span>
+                </button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="image-cell">
+              <div class="image">
+                <span class="icon text-green-500"><i class="mdi mdi-folder"></i></span>
+              </div>
+            </td>
+            <td data-label="Name">Sienna Hayes</td>
+            <td data-label="Company">Conn, Jerde and Douglas</td>
+            <td data-label="City">Jonathanfort</td>
+            <td data-label="Created">
+              <small class="text-gray-500" title="Mar 7, 2021">Mar 7, 2021</small>
+            </td>
+            <td class="actions-cell">
+              <div class="buttons right nowrap">
+                <button class="button small green --jb-modal"  data-target="sample-modal" type="button">
+                  <span class="icon"><i class="mdi mdi-eye"></i></span>
+                </button>
+              </div>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+        <div class="table-pagination">
+          <div class="flex items-center justify-between">
+            <small>Page 1 of 3</small>
+            <div class="buttons">
+              <button type="button" class="button active">1</button>
+              <button type="button" class="button">2</button>
+              <button type="button" class="button">3</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+<footer class="footer">
+  <div class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0">
+	<div>
+	  © 2022 Loc Helper Alpha 1.0.0
+	</div>
+
+	<div>
+	  <p>Distributed By: Heechan Yang</p>
+	</div>
+  </div>
+</footer>
+
+<div id="sample-modal" class="modal">
+  <div class="modal-background --jb-modal-close"></div>
+  <div class="modal-card">
+    <header class="modal-card-head">
+      <p class="modal-card-title">Sample modal</p>
+    </header>
+    <section class="modal-card-body">
+      <p>Lorem ipsum dolor sit amet <b>adipiscing elit</b></p>
+      <p>This is sample modal</p>
+    </section>
+    <footer class="modal-card-foot" style="justify-content: flex-end !important;">
+		<div class="flex items-center justify-between">
+		  <small></small>
+		  <div class="buttons">
+			<button class="button --jb-modal-close">Cancel</button>
+			<button class="button blue --jb-modal-close">Confirm</button>
 		  </div>
 		</div>
-		
-		<div id="snackbar">Copied to your clipboard!</div>
-	</body>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-	<script src="./ldhelper.js"></script>
+    </footer>
+  </div>
+</div>
+
+</div>
+
+<script type="text/javascript" src="js/tailwind.js"></script>
+<script type="text/javascript" src="js/gridlyhelper.js"></script>
+
+<link rel="stylesheet" href="https://cdn.materialdesignicons.com/4.9.95/css/materialdesignicons.min.css">
+
+</body>
 </html>

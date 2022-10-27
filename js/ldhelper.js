@@ -746,7 +746,7 @@
 
                 document.getElementById("upload_status").innerHTML = `
                     <div style="display: flex; flex-direction: col; align-itmes: center;">
-                        <img width="40px" height="40px" src="./loading.gif" style="margin-left: .5rem; margin-right: 1rem;" alt="..."/>
+                        <img width="40px" height="40px" src="./assets/loading.gif" style="margin-left: .5rem; margin-right: 1rem;" alt="..."/>
                         <div style="flex:1; margin: auto;">
                             LOADING... Please wait. This may take a few seconds. <br>
                             If your browser asks you if you would like to wait, please click on wait button.
