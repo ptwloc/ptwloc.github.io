@@ -334,14 +334,31 @@ table thead {
   border-bottom: 1px solid #BCDBEA;
 }
 
+#row_count {
+  border-radius: 6px;
+  background-color: #BCDBEA;
+  color: white;
+  width: 80px;
+  height: 40px;
+  position: fixed;
+  right: 320px;
+  bottom: 80px;
+  font-weight: bold;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 #pagination {
   border-radius: 6px;
   background-color: #BCDBEA;
+  color: white;
   width: 60px;
   height: 40px;
   cursor: pointer;
   position: fixed;
-  right: 180px;
+  right: 240px;
   bottom: 80px;
   font-weight: bold;
   font-size: 0.9rem;
@@ -362,7 +379,7 @@ table thead {
   width: 40px;
   height: 40px;
   position: fixed;
-  right: 120px;
+  right: 180px;
   bottom: 80px; 
   cursor: pointer;
   display: flex;
@@ -385,7 +402,7 @@ table thead {
   width: 40px;
   height: 40px;
   position: fixed;
-  right: 60px;
+  right: 120px;
   bottom: 80px;
   cursor: pointer;
   display: flex;
@@ -400,6 +417,61 @@ table thead {
 
 #next_page:hover {
   box-shadow: inset 100vw 0 0 0 #54b3d6;;
+}
+
+#scroll_to_top {
+  border-radius: 6px;
+  background-color: #BCDBEA;
+  width: 40px;
+  height: 40px;
+  position: fixed;
+  right: 60px;
+  bottom: 80px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 20px;
+  color: white;
+  box-shadow: inset 0 0 0 0 #54b3d6;
+  transition: color 0.1s ease-in-out, box-shadow .3s ease-in-out;
+}
+
+#scroll_to_top:hover {
+  box-shadow: inset 100vw 0 0 0 #54b3d6;;
+}
+
+@-webkit-keyframes yellow-fade {
+  from {
+    background: #f96;
+  }
+  to {
+    background: #fff;
+  }
+}
+@-moz-keyframes yellow-fade {
+  from {
+    background: #f96;
+  }
+  to {
+    background: #fff;
+  }
+}
+@keyframes yellow-fade {
+  from {
+    background: #f96;
+  }
+  to {
+    background: #fff;
+  }
+}
+
+.fade-it {
+  -webkit-animation: yellow-fade 1s ease-in-out 0s;
+  -moz-animation: yellow-fade 1s ease-in-out 0s;
+  -o-animation: yellow-fade 1s ease-in-out 0s;
+  animation: yellow-fade 1s ease-in-out 0s;
 }
 
 /* 

@@ -239,14 +239,27 @@
 					scrollAnimation = setTimeout("scrollToTop()", 10);
 				} else clearTimeout(scrollAnimation);
 			}
+
+			function scrollToDiv(id) {
+				var element = document.getElementById(id);
+				var position = element.getBoundingClientRect();
+				var y = position.top;
+
+				document.getElementById(id).className = "fade-it";
+				setTimeout(() => {
+					document.getElementById(id).className = "";
+				}, 1100);
+
+				window.scrollTo(0, y-60);
+			}
 			
 			function copyToClipboardAndStringChecker(element) {
 				try {
 					document.getElementById("s_to_check_source").value = element.children.item(1).innerText;
 					document.getElementById("s_to_check_translation").value = element.children.item(2).innerText;
 					checkString();
-					document.getElementById("copied_string_id").innerHTML = `<span style="cursor: pointer;" onMouseOver="this.style.color='black'" onMouseOut="this.style.color='grey'" onclick="copyToClipboard(this.innerText)">` + element.children.item(0).children.item(0).innerText + `</span>` +
-																			`<a style="margin-left: 1rem; cursor: pointer;" href="#` + element.children.item(0).children.item(0).innerText +`">Go back to Table</a>`;
+					document.getElementById("copied_string_id").innerHTML = `<span style="cursor: pointer;" onMouseOver="this.style.color='black'" onMouseOut="this.style.color='grey'" onclick="copyToClipboard(this.innerText)">${element.children.item(0).children.item(0).innerText}</span>` +
+																			`<a style="margin-left: 1rem; cursor: pointer; color: blue; text-decoration: underline; text-decoration-color: blue;" onclick="scrollToDiv('${element.children.item(0).children.item(0).innerText}')">Go back to Table</a>`;
 					scrollToTop();
 					copyToClipboard(element.children.item(0).children.item(0).innerText);
 				} catch(e) {
@@ -285,7 +298,10 @@
 				  for(let i=0; i<errorMessageArray.length; i++) {
 					  if(errorMessageArray[i]["language"] == selectedLanguage + " text") {
 						  let defect = escapeHtml(errorMessageArray[i].defect);
-						  let note = errorMessageArray[i].type == 3 ? "<br>" + escapeHtml(errorMessageArray[i].note) + "<br><br>" + escapeHtml(errorMessageArray[i].note2) : errorMessageArray[i].note;
+						  let note = errorMessageArray[i].type == 3 ? 
+							(errorMessageArray[i].note ? "<br>Source Language Text:<br>" + escapeHtml(errorMessageArray[i].note) + "<br>" : "") +
+							(errorMessageArray[i].note2 ? "<br>Translation Text:<br>" + escapeHtml(errorMessageArray[i].note2) : "") :
+							errorMessageArray[i].note;
 						  text += `${defect}`
 						  text += `<br><span style='color: grey; font-weight: bold; font-size: 0.9rem;'>${note}</span><br><br>`;
 					  }
@@ -299,7 +315,7 @@
 				var table = document.querySelector("#result_table>tbody");
 				table.innerHTML = "";
 				rowCount = 0;
-				document.getElementById("row_count").innerText = rowCount == 0 ? '' : rowCount;
+				document.getElementById("row_count").innerText = rowCount;
 				allRows = [];
 				pagination = 1;
 				maxPagination = 1;
@@ -392,7 +408,7 @@
 
 				  displayRows();
 
-				  document.getElementById("row_count").innerText = rowCount == 0 ? '' : rowCount;
+				  document.getElementById("row_count").innerText = rowCount;
 			  }
 			}
 			
@@ -503,11 +519,32 @@
 						// 3-4-3. Find any unmatching code splits between Source Language Text and Translation Text
 						for (const key in codesplits) {
 							if(test_array[i][key] && defect_languages.length == 0 && JSON.stringify(codesplits["Source Language Text"].sort()) !== JSON.stringify(codesplits[key].sort())) {
+								let splits = codesplits["Source Language Text"].sort();
+								let splits2 = codesplits[key].sort();
+								let note = "";
+								let note2 = "";
+
+								const counts = {};
+								splits.forEach(function (x) { counts[x] = (counts[x] || 0) + 1; });
+								const counts2 = {};
+								splits2.forEach(function (x) { counts2[x] = (counts2[x] || 0) + 1; });
+
+								for(let key in counts) {
+									if(counts[key] > counts2[key]) {
+										note += (counts[key] - counts2[key]) + " more " + key + " found, ";
+									} else if(counts[key] < counts2[key]) {
+										note2 += (counts2[key] - counts[key]) + " more " + key + " found, ";
+									}
+								}
+
+								note = note.substring(0, note.lastIndexOf(", "));
+								note2 = note2.substring(0, note2.lastIndexOf(", "));
+
 								defect_languages.push({
 										language: key,
 										defect: comments_unmatching_code,
-										note: "Source Language Text: " + JSON.stringify(codesplits["Source Language Text"].sort()),
-										note2: "Translation Text: " + JSON.stringify(codesplits[key].sort()),
+										note,
+										note2,
 										type: 3
 									});
 							}
@@ -549,7 +586,7 @@
 			
 			function checkString(isTouchingSourceText = false) {
 				if(isTouchingSourceText) {
-					document.getElementById("copied_string_id").innerText = "";
+					document.getElementById("copied_string_id").innerText = "Source Language Text has been touched";
 				}
 			
 				let src = document.getElementById("s_to_check_source").value;
@@ -572,7 +609,10 @@
 						
 						for(let i=0; i<errorMessageArray.length; i++) {
 							let defect = errorMessageArray[i].defect;
-							let note = errorMessageArray[i].type == 3 ? "\n" + errorMessageArray[i].note + "\n\n" + errorMessageArray[i].note2 : errorMessageArray[i].note;
+							let note = errorMessageArray[i].type == 3 ? 
+										(errorMessageArray[i].note ? "\nSource Language Text:\n" + errorMessageArray[i].note + "\n" : "") +
+										(errorMessageArray[i].note2 ? "\nTranslation Text:\n" + errorMessageArray[i].note2 : "") :
+										errorMessageArray[i].note;
 							text += `${defect}`
 							text += `\n${note}\n\n`;
 
@@ -637,7 +677,7 @@
 
 				displayRows();
 				
-				document.getElementById("row_count").innerText = rowCount == 0 ? '' : rowCount;
+				document.getElementById("row_count").innerText = rowCount;
 			}
 			
 			function getCodeIntegrityCheckResults() {

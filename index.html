@@ -10,7 +10,7 @@
 		<link rel="stylesheet" href="./css/ldhelper.css">
 	</head>
 	<body style="background: #EAEDF1; padding: 50px; font-family: Arial, Helvetica, sans-serif;">
-		<p style="position: absolute; right: 60px; top: 1rem; font-size: .8rem; cursor: pointer;" onclick="easterEgg()">@LD Helper Alpha 2.4.4 By Heechan</p>
+		<p style="position: absolute; right: 60px; top: 1rem; font-size: .8rem; cursor: pointer;" onclick="easterEgg()">@LD Helper Alpha 2.5.0 By Heechan</p>
 		<div style="display: flex; flex-direction: col; align-items: center;">
 			<img src="./assets/ldhelpericon.png" alt="LD Helper" width="30px" height="30px" />
 			<h5 style="margin: 5px; color: grey;">Press ESC to clear all inputs / <a href="./lochelper.html">Go to Loc Helper</a></h5>
@@ -106,7 +106,7 @@
 			<thead>
 				<tr>
 					<th><b>String ID (Copy on click)</b></th>
-					<th><b>Source text</b>&nbsp;&nbsp;<span id="row_count" style="font-size: 1rem; font-weight: normal; color: grey;"></span></th>
+					<th><b>Source text</b></th>
 					<th>
 						<select id="language_select" onchange="switchLanguage()">
 							<option value="Select">Please load Excel file</option>
@@ -122,9 +122,11 @@
 			</thead>
 			<tbody></tbody>
 		</table>
+		<div id="row_count">0</div>
 		<div id="pagination" onclick="firstOrLastPage()">0/0</div>
 		<div id="prev_page" onclick="prevPage()">&lt;</div>
 		<div id="next_page" onclick="nextPage()">&gt;</div>
+		<div id="scroll_to_top" onclick="scrollToTop()">↑</div>
 		<br><br><br>
 		
 		<div id="help_modal" class="modal">
