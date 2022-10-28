@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en" class="">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Loc Helper</title>
+
+  <!-- Tailwind is included -->
+  <link rel="stylesheet" href="css/tailwind.css?v=1628755089081">
+  <link rel="stylesheet" href="css/gridlyhelper.css">
+
+  <link rel="icon" type="image/png" sizes="32x32" href="./assets/gridlyhelpericon.png"/>
+
+  <meta name="description" content="Loc Helper">
+</head>
+<body>
+
+<div id="app">
+
+<nav id="navbar-main" class="navbar is-fixed-top">
+  <div class="navbar-brand is-right">
+    <a class="navbar-item --jb-navbar-menu-toggle" data-target="navbar-menu">
+      <span class="icon"><i class="mdi mdi-dots-vertical mdi-24px"></i></span>
+    </a>
+  </div>
+  <div class="navbar-menu" id="navbar-menu">
+    <div class="navbar-end">
+      <div class="navbar-item dropdown has-divider has-user-avatar">
+        <a class="navbar-link">
+          <div class="user-avatar">
+            <img src="./assets/usericon.png" alt="John Doe" class="rounded-full">
+          </div>
+          <div class="is-user-name"><span>Sample User</span></div>
+          <span class="icon"><i class="mdi mdi-chevron-down"></i></span>
+        </a>
+        <div class="navbar-dropdown">
+          <a class="navbar-item">
+            <span class="icon"><i class="mdi mdi-logout"></i></span>
+            <span>Log Out</span>
+          </a>
+        </div>
+      </div>
+      <a href="#" title="Log out" class="navbar-item">
+        <span class="icon"><i class="mdi mdi-login"></i></span>
+        <span>Okta Log in</span>
+      </a>
+    </div>
+  </div>
+</nav>
+
+<aside class="aside is-placed-left is-expanded">
+  <div class="aside-tools">
+    <div>
+		Project <b class="font-black">Sample</b>
+    </div>
+  </div>
+  <div class="menu is-menu-main">
+    <p class="menu-label">Gridly</p>
+    <ul class="menu-list">
+      <li class="active">
+        <a href="lochelper.html">
+          <span class="icon"><i class="mdi mdi-monitor"></i></span>
+          <span class="menu-item-label">Projects</span>
+        </a>
+      </li>
+    </ul>
+    <p class="menu-label">User</p>
+    <ul class="menu-list">
+      <li class="--set-active-profile-html">
+        <a href="#">
+          <span class="icon"><i class="mdi mdi-table"></i></span>
+          <span class="menu-item-label">Dataview</span>
+        </a>
+      </li>
+      <li class="--set-active-forms-html">
+        <a href="#">
+          <span class="icon"><i class="mdi mdi-alpha-t-box-outline"></i></span>
+          <span class="menu-item-label">Testplan</span>
+        </a>
+      </li>
+      <li class="--set-active-forms-html">
+        <a href="#">
+          <span class="icon"><i class="mdi mdi-alpha-c-box-outline"></i></span>
+          <span class="menu-item-label">Crosschecking</span>
+        </a>
+      </li>
+      <li class="--set-active-forms-html">
+        <a href="#">
+          <span class="icon"><i class="mdi mdi-alpha-r-box-outline"></i></span>
+          <span class="menu-item-label">Regression</span>
+        </a>
+      </li>
+      <li class="--set-active-tables-html">
+        <a href="#">
+          <span class="icon"><i class="mdi mdi-feature-search-outline"></i></span>
+          <span class="menu-item-label">Code Check</span>
+        </a>
+      </li>
+    </ul>
+    <p class="menu-label">Admin</p>
+    <ul class="menu-list">
+      <li>
+        <a href="#" class="has-icon">
+          <span class="icon"><i class="mdi mdi-alpha-t-box"></i></span>
+          <span class="menu-item-label">Manage Testplan</span>
+        </a>
+      </li>
+      <li>
+        <a href="#" class="has-icon">
+          <span class="icon"><i class="mdi mdi-alpha-c-box"></i></span>
+          <span class="menu-item-label">Manage Crosschecking</span>
+        </a>
+      </li>
+      <li>
+        <a href="#" class="has-icon">
+          <span class="icon"><i class="mdi mdi-alpha-r-box"></i></span>
+          <span class="menu-item-label">Manage Regression</span>
+        </a>
+      </li>
+    </ul>
+    <p class="menu-label">Legacy</p>
+    <ul class="menu-list">
+      <li>
+        <a href="./index.html" class="has-icon">
+          <span class="icon"><i class="mdi mdi-arrow-left-bold-outline"></i></span>
+          <span class="menu-item-label">LD Helper</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</aside>
+
+<section class="is-title-bar">
+  <div class="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
+    <ul>
+      <li>Gridly</li>
+      <li>Projects</li>
+    </ul>
+  </div>
+</section>
+
+<div class="notification blue">
+  <div class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0">
+	<div>
+	  <span class="icon"><i class="mdi mdi-cursor-pointer"></i></span>
+	  <b>Select Your Project</b>
+	</div>
+	<button type="button" class="--jb-notification-dismiss">X</button>
+  </div>
+</div>
+
+<section class="is-hero-bar">
+  <div class="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
+    <h1 class="title">
+      Sample
+    </h1>
+    <button class="button light"><span class="icon"><i class="mdi mdi-chevron-up"></i></span>Hide</button>
+  </div>
+</section>
+
+  <section class="section main-section">
+
+    <div class="grid gap-6 grid-cols-1 md:grid-cols-3 mb-6">
+      <div class="card">
+        <div class="card-content">
+          <div class="flex items-center justify-between">
+            <div class="widget-label">
+              <h3>
+                Sample Project
+              </h3>
+              <h1>
+                VO
+              </h1>
+            </div>
+            <span class="icon widget-icon text-green-500"><i class="mdi mdi-application mdi-48px"></i></span>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-content">
+          <div class="flex items-center justify-between">
+            <div class="widget-label">
+              <h3>
+                Sample Project
+              </h3>
+              <h1>
+                Achievements
+              </h1>
+            </div>
+            <span class="icon widget-icon text-red-500"><i class="mdi mdi-application mdi-48px"></i></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-content">
+          <div class="flex items-center justify-between">
+            <div class="widget-label">
+              <h3>
+                Sample Project
+              </h3>
+              <h1>
+                UI
+              </h1>
+            </div>
+            <span class="icon widget-icon text-red-500"><i class="mdi mdi-application mdi-48px"></i></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-content">
+          <div class="flex items-center justify-between">
+            <div class="widget-label">
+              <h3>
+                Sample Project
+              </h3>
+              <h1>
+                Project
+              </h1>
+            </div>
+            <span class="icon widget-icon text-blue-500"><i class="mdi mdi-application mdi-48px"></i></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card has-table">
+      <header class="card-header">
+        <p class="card-header-title">
+          <span class="icon"><i class="mdi mdi-monitor"></i></span>
+          My Projects
+        </p>
+        <a href="#" class="card-header-icon">
+          <span class="icon"><i class="mdi mdi-reload"></i></span>
+        </a>
+      </header>
+      <div class="card-content">
+        <table>
+          <thead>
+          <tr>
+            <th></th>
+            <th>Project Name</th>
+            <th>Description</th>
+            <th>Author</th>
+            <th>Created on</th>
+            <th></th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td class="image-cell">
+              <div class="image">
+                <span class="icon text-green-500"><i class="mdi mdi-folder"></i></span>
+              </div>
+            </td>
+            <td data-label="Name">Sample</td>
+            <td data-label="Company"></td>
+            <td data-label="City">Heechan Yang</td>
+            <td data-label="Created">
+              <small class="text-gray-500" title="Oct 25, 2021">July 13, 2020</small>
+            </td>
+            <td class="actions-cell">
+              <div class="buttons right nowrap">
+                <button class="button small green --jb-modal"  data-target="sample-modal" type="button">
+                  <span class="icon"><i class="mdi mdi-eye"></i></span>
+                </button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="image-cell">
+              <div class="image">
+                <span class="icon text-green-500"><i class="mdi mdi-folder"></i></span>
+              </div>
+            </td>
+            <td data-label="Name">Felicita Yundt</td>
+            <td data-label="Company">Johns-Weissnat</td>
+            <td data-label="City">East Ariel</td>
+            <td data-label="Created">
+              <small class="text-gray-500" title="Jan 8, 2021">Jan 8, 2021</small>
+            </td>
+            <td class="actions-cell">
+              <div class="buttons right nowrap">
+                <button class="button small green --jb-modal"  data-target="sample-modal" type="button">
+                  <span class="icon"><i class="mdi mdi-eye"></i></span>
+                </button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="image-cell">
+              <div class="image">
+                <span class="icon text-green-500"><i class="mdi mdi-folder"></i></span>
+              </div>
+            </td>
+            <td data-label="Name">Mr. Larry Satterfield V</td>
+            <td data-label="Company">Hyatt Ltd</td>
+            <td data-label="City">Windlerburgh</td>
+            <td data-label="Created">
+              <small class="text-gray-500" title="Dec 18, 2021">Dec 18, 2021</small>
+            </td>
+            <td class="actions-cell">
+              <div class="buttons right nowrap">
+                <button class="button small green --jb-modal"  data-target="sample-modal" type="button">
+                  <span class="icon"><i class="mdi mdi-eye"></i></span>
+                </button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="image-cell">
+              <div class="image">
+                <span class="icon text-green-500"><i class="mdi mdi-folder"></i></span>
+              </div>
+            </td>
+            <td data-label="Name">Mr. Broderick Kub</td>
+            <td data-label="Company">Kshlerin, Bauch and Ernser</td>
+            <td data-label="City">New Kirstenport</td>
+            <td data-label="Created">
+              <small class="text-gray-500" title="Sep 13, 2021">Sep 13, 2021</small>
+            </td>
+            <td class="actions-cell">
+              <div class="buttons right nowrap">
+                <button class="button small green --jb-modal"  data-target="sample-modal" type="button">
+                  <span class="icon"><i class="mdi mdi-eye"></i></span>
+                </button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="image-cell">
+              <div class="image">
+                <span class="icon text-green-500"><i class="mdi mdi-folder"></i></span>
+              </div>
+            </td>
+            <td data-label="Name">Barry Weber</td>
+            <td data-label="Company">Schulist, Mosciski and Heidenreich</td>
+            <td data-label="City">East Violettestad</td>
+            <td data-label="Created">
+              <small class="text-gray-500" title="Jul 24, 2021">Jul 24, 2021</small>
+            </td>
+            <td class="actions-cell">
+              <div class="buttons right nowrap">
+                <button class="button small green --jb-modal"  data-target="sample-modal" type="button">
+                  <span class="icon"><i class="mdi mdi-eye"></i></span>
+                </button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="image-cell">
+              <div class="image">
+                <span class="icon text-green-500"><i class="mdi mdi-folder"></i></span>
+              </div>
+            </td>
+            <td data-label="Name">Bert Kautzer MD</td>
+            <td data-label="Company">Gerhold and Sons</td>
+            <td data-label="City">Mayeport</td>
+            <td data-label="Created">
+              <small class="text-gray-500" title="Mar 30, 2021">Mar 30, 2021</small>
+            </td>
+            <td class="actions-cell">
+              <div class="buttons right nowrap">
+                <button class="button small green --jb-modal"  data-target="sample-modal" type="button">
+                  <span class="icon"><i class="mdi mdi-eye"></i></span>
+                </button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="image-cell">
+              <div class="image">
+                <span class="icon text-green-500"><i class="mdi mdi-folder"></i></span>
+              </div>
+            </td>
+            <td data-label="Name">Lonzo Steuber</td>
+            <td data-label="Company">Skiles Ltd</td>
+            <td data-label="City">Marilouville</td>
+            <td data-label="Created">
+              <small class="text-gray-500" title="Feb 12, 2021">Feb 12, 2021</small>
+            </td>
+            <td class="actions-cell">
+              <div class="buttons right nowrap">
+                <button class="button small green --jb-modal"  data-target="sample-modal" type="button">
+                  <span class="icon"><i class="mdi mdi-eye"></i></span>
+                </button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="image-cell">
+              <div class="image">
+                <span class="icon text-green-500"><i class="mdi mdi-folder"></i></span>
+              </div>
+            </td>
+            <td data-label="Name">Jonathon Hahn</td>
+            <td data-label="Company">Flatley Ltd</td>
+            <td data-label="City">Billiemouth</td>
+            <td data-label="Created">
+              <small class="text-gray-500" title="Dec 30, 2021">Dec 30, 2021</small>
+            </td>
+            <td class="actions-cell">
+              <div class="buttons right nowrap">
+                <button class="button small green --jb-modal"  data-target="sample-modal" type="button">
+                  <span class="icon"><i class="mdi mdi-eye"></i></span>
+                </button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="image-cell">
+              <div class="image">
+                <span class="icon text-green-500"><i class="mdi mdi-folder"></i></span>
+              </div>
+            </td>
+            <td data-label="Name">Ryley Wuckert</td>
+            <td data-label="Company">Heller-Little</td>
+            <td data-label="City">Emeraldtown</td>
+            <td data-label="Created">
+              <small class="text-gray-500" title="Jun 28, 2021">Jun 28, 2021</small>
+            </td>
+            <td class="actions-cell">
+              <div class="buttons right nowrap">
+                <button class="button small green --jb-modal"  data-target="sample-modal" type="button">
+                  <span class="icon"><i class="mdi mdi-eye"></i></span>
+                </button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="image-cell">
+              <div class="image">
+                <span class="icon text-green-500"><i class="mdi mdi-folder"></i></span>
+              </div>
+            </td>
+            <td data-label="Name">Sienna Hayes</td>
+            <td data-label="Company">Conn, Jerde and Douglas</td>
+            <td data-label="City">Jonathanfort</td>
+            <td data-label="Created">
+              <small class="text-gray-500" title="Mar 7, 2021">Mar 7, 2021</small>
+            </td>
+            <td class="actions-cell">
+              <div class="buttons right nowrap">
+                <button class="button small green --jb-modal"  data-target="sample-modal" type="button">
+                  <span class="icon"><i class="mdi mdi-eye"></i></span>
+                </button>
+              </div>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+        <div class="table-pagination">
+          <div class="flex items-center justify-between">
+            <small>Page 1 of 3</small>
+            <div class="buttons">
+              <button type="button" class="button active">1</button>
+              <button type="button" class="button">2</button>
+              <button type="button" class="button">3</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+<footer class="footer">
+  <div class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0">
+	<div>
+	  © 2022 Loc Helper Alpha 1.0.0
+	</div>
+
+	<div>
+	  <p>Distributed By: Heechan Yang</p>
+	</div>
+  </div>
+</footer>
+
+<div id="sample-modal" class="modal">
+  <div class="modal-background --jb-modal-close"></div>
+  <div class="modal-card">
+    <header class="modal-card-head">
+      <p class="modal-card-title">Sample modal</p>
+    </header>
+    <section class="modal-card-body">
+      <p>Lorem ipsum dolor sit amet <b>adipiscing elit</b></p>
+      <p>This is sample modal</p>
+    </section>
+    <footer class="modal-card-foot" style="justify-content: flex-end !important;">
+		<div class="flex items-center justify-between">
+		  <small></small>
+		  <div class="buttons">
+			<button class="button --jb-modal-close">Cancel</button>
+			<button class="button blue --jb-modal-close">Confirm</button>
+		  </div>
+		</div>
+    </footer>
+  </div>
+</div>
+
+</div>
+
+<script type="text/javascript" src="js/tailwind.js"></script>
+<script type="text/javascript" src="js/gridlyhelper.js"></script>
+
+<link rel="stylesheet" href="https://cdn.materialdesignicons.com/4.9.95/css/materialdesignicons.min.css">
+
+</body>
+</html>
