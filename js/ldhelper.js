@@ -440,7 +440,7 @@
 				}
 				
 				for(let i=0; i<source_array["String Identifier"].length; i++) {
-					if(source_array["Source Language Text"][i] && (source_array["Source Language Text"][i].includes("</") || source_array["Source Language Text"][i].includes("/>") || source_array["Source Language Text"][i].includes("{") || source_array["Source Language Text"][i].includes("}")
+					if(source_array["Source Language Text"][i] && (source_array["Source Language Text"][i].includes("<") || source_array["Source Language Text"][i].includes(">") || source_array["Source Language Text"][i].includes("{") || source_array["Source Language Text"][i].includes("}")
 					|| source_array["Source Language Text"][i].includes("[") || source_array["Source Language Text"][i].includes("]"))) {
 						let obj = {};
 
@@ -632,8 +632,8 @@
 				if(!src) {
 					text = "Source Language Text is empty."
 					setCommentsFlagColor("");
-				} else if(!src.includes("</") && !src.includes("/>") && !src.includes("{") && !src.includes("}") && !src.includes("[") && !src.includes("]")) {
-					text = "Source Language Text does not contain any valid code brackets.\n\nValid Code Brackets: </ OR /> OR { OR } OR [ OR ]"
+				} else if(!src.includes("<") && !src.includes(">") && !src.includes("{") && !src.includes("}") && !src.includes("[") && !src.includes("]")) {
+					text = "Source Language Text does not contain any valid code brackets.\n\nValid Code Brackets: < OR > OR { OR } OR [ OR ]"
 					setCommentsFlagColor("");
 				} else if(!trs) {
 					text = "Translation Text is empty."
